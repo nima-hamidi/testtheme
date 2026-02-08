@@ -1,0 +1,845 @@
+/**
+ * استایل‌های ریدر فصل - Flavor Novel
+ * فایل جداگانه برای بهینه‌سازی عملکرد
+ *
+ * @package Flavor_Novel
+ */
+
+/* ===== بدنه ریدر ===== */
+.fn-reading-mode {
+    background: var(--fn-bg-primary);
+}
+
+.fn-reader-wrapper {
+    padding-bottom: 100px;
+}
+
+/* ===== ریدر اصلی ===== */
+.fn-reader {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 24px;
+    transition: max-width 0.3s ease;
+}
+
+/* ===== هدر فصل ===== */
+.fn-reader__header {
+    text-align: center;
+    padding: 30px 0;
+    margin-bottom: 30px;
+    border-bottom: 2px solid var(--fn-border);
+}
+
+.fn-reader__novel-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: var(--fn-accent);
+    font-weight: 600;
+    margin-bottom: 12px;
+    padding: 6px 16px;
+    background: var(--fn-accent-light);
+    border-radius: 20px;
+    transition: var(--fn-transition);
+}
+
+.fn-reader__novel-title:hover {
+    background: var(--fn-accent);
+    color: #fff;
+}
+
+.fn-reader__novel-cover-sm {
+    width: 22px;
+    height: 30px;
+    border-radius: 3px;
+    object-fit: cover;
+}
+
+.fn-reader__chapter-title {
+    font-size: 1.8rem;
+    font-weight: 900;
+    line-height: 1.4;
+    margin: 12px 0 0;
+    color: var(--fn-text-primary);
+}
+
+.fn-reader__chapter-subtitle {
+    display: block;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--fn-text-secondary);
+    margin-top: 6px;
+}
+
+.fn-reader__meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.fn-reader__meta-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.82rem;
+    color: var(--fn-text-muted);
+}
+
+/* ===== محتوای فصل ===== */
+.fn-reader__content {
+    font-family: var(--fn-font-reader);
+    font-size: 18px;
+    line-height: 2;
+    color: var(--fn-text-primary);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    transition: font-size 0.2s ease, line-height 0.2s ease, font-family 0.2s ease;
+}
+
+.fn-reader__content p {
+    margin-bottom: 1.4em;
+    text-align: justify;
+}
+
+.fn-reader__content p:last-child {
+    margin-bottom: 0;
+}
+
+/* استایل‌های محتوا: دیالوگ، تاکید و ... */
+.fn-reader__content em,
+.fn-reader__content i {
+    font-style: italic;
+    color: var(--fn-text-secondary);
+}
+
+.fn-reader__content strong,
+.fn-reader__content b {
+    font-weight: 700;
+    color: var(--fn-text-primary);
+}
+
+.fn-reader__content blockquote {
+    border-right: 4px solid var(--fn-accent);
+    padding: 16px 20px;
+    margin: 24px 0;
+    background: var(--fn-accent-light);
+    border-radius: 0 var(--fn-radius-sm) var(--fn-radius-sm) 0;
+    font-style: italic;
+    color: var(--fn-text-secondary);
+}
+
+.fn-reader__content hr {
+    border: none;
+    text-align: center;
+    margin: 40px 0;
+}
+
+.fn-reader__content hr::after {
+    content: '• • •';
+    color: var(--fn-text-muted);
+    font-size: 1.2rem;
+    letter-spacing: 8px;
+}
+
+.fn-reader__content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--fn-radius-sm);
+    margin: 20px auto;
+    display: block;
+}
+
+/* انتخاب متن */
+.fn-reader__content ::selection {
+    background: var(--fn-accent-light);
+    color: var(--fn-accent);
+}
+
+/* ===== پایان فصل ===== */
+.fn-reader__footer {
+    margin-top: 50px;
+    padding-top: 30px;
+    border-top: 2px solid var(--fn-border);
+}
+
+.fn-reader__end-mark {
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--fn-text-muted);
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+
+/* پیش‌نمایش فصل بعدی */
+.fn-reader__next-preview {
+    background: var(--fn-bg-secondary);
+    border: 1px solid var(--fn-border);
+    border-radius: var(--fn-radius-md);
+    padding: 24px;
+    text-align: center;
+}
+
+.fn-reader__next-label {
+    font-size: 0.82rem;
+    color: var(--fn-text-muted);
+    margin-bottom: 10px;
+}
+
+.fn-reader__next-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 16px;
+    background: var(--fn-accent-gradient);
+    color: #fff;
+    border-radius: var(--fn-radius-sm);
+    font-weight: 700;
+    font-size: 1rem;
+    transition: var(--fn-transition);
+}
+
+.fn-reader__next-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(108, 92, 231, 0.3);
+    color: #fff;
+}
+
+.fn-reader__next-number {
+    font-size: 0.82rem;
+    opacity: 0.8;
+}
+
+/* پایان تمام فصل‌ها */
+.fn-reader__completed {
+    text-align: center;
+    padding: 40px;
+    background: var(--fn-accent-light);
+    border-radius: var(--fn-radius-md);
+}
+
+.fn-reader__completed-icon {
+    font-size: 3rem;
+    margin-bottom: 12px;
+}
+
+.fn-reader__completed h3 {
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+}
+
+.fn-reader__completed p {
+    color: var(--fn-text-secondary);
+    margin-bottom: 20px;
+}
+
+.fn-reader__completed-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* ===== ناوبری فصل ===== */
+.fn-chapter-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px 0;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.fn-chapter-nav__btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: var(--fn-radius-sm);
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: var(--fn-transition);
+    white-space: nowrap;
+}
+
+.fn-chapter-nav__btn--prev,
+.fn-chapter-nav__btn--next {
+    flex: 1;
+    justify-content: center;
+    background: var(--fn-accent);
+    color: #fff;
+}
+
+.fn-chapter-nav__btn--prev:hover,
+.fn-chapter-nav__btn--next:hover {
+    background: var(--fn-accent-hover);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.fn-chapter-nav__btn--list {
+    background: var(--fn-bg-secondary);
+    border: 1px solid var(--fn-border);
+    color: var(--fn-text-secondary);
+    flex: 0 0 auto;
+    padding: 12px 16px;
+}
+
+.fn-chapter-nav__btn--list:hover {
+    border-color: var(--fn-accent);
+    color: var(--fn-accent);
+}
+
+.fn-chapter-nav__btn--disabled {
+    background: var(--fn-bg-tertiary);
+    color: var(--fn-text-muted);
+    cursor: not-allowed;
+    flex: 1;
+    justify-content: center;
+    opacity: 0.5;
+}
+
+/* ===== پنل تنظیمات ===== */
+.fn-reader-settings {
+    position: fixed;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--fn-bg-secondary);
+    border: 1px solid var(--fn-border);
+    border-radius: var(--fn-radius-lg);
+    padding: 24px;
+    box-shadow: var(--fn-shadow-lg);
+    z-index: 200;
+    width: 380px;
+    max-width: calc(100vw - 32px);
+    display: none;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.fn-reader-settings.open {
+    display: block;
+    animation: fnSlideUp 0.3s ease;
+}
+
+.fn-reader-settings__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--fn-border);
+}
+
+.fn-reader-settings__title {
+    font-size: 1rem;
+    font-weight: 800;
+    margin: 0;
+}
+
+.fn-reader-settings__close {
+    color: var(--fn-text-muted);
+    padding: 4px;
+    cursor: pointer;
+    transition: var(--fn-transition);
+}
+
+.fn-reader-settings__close:hover {
+    color: var(--fn-accent);
+}
+
+.fn-reader-settings__group {
+    margin-bottom: 20px;
+}
+
+.fn-reader-settings__group:last-child {
+    margin-bottom: 0;
+}
+
+.fn-reader-settings__label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--fn-text-secondary);
+    margin-bottom: 10px;
+}
+
+.fn-settings-value {
+    font-size: 0.78rem;
+    color: var(--fn-accent);
+    font-weight: 600;
+    background: var(--fn-accent-light);
+    padding: 2px 8px;
+    border-radius: 8px;
+}
+
+.fn-reader-settings__row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* سلکت */
+.fn-reader-settings__select {
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--fn-bg-primary);
+    border: 1px solid var(--fn-border);
+    border-radius: var(--fn-radius-sm);
+    color: var(--fn-text-primary);
+    font-size: 0.88rem;
+    cursor: pointer;
+}
+
+.fn-reader-settings__select:focus {
+    border-color: var(--fn-accent);
+}
+
+/* رنج اسلایدر */
+.fn-settings-range {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    background: var(--fn-bg-tertiary);
+    border-radius: 3px;
+    outline: none;
+}
+
+.fn-settings-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--fn-accent);
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(108, 92, 231, 0.3);
+    transition: transform 0.2s ease;
+}
+
+.fn-settings-range::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+.fn-settings-range::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--fn-accent);
+    cursor: pointer;
+    border: none;
+}
+
+/* دکمه‌های کوچک تنظیمات */
+.fn-settings-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--fn-bg-primary);
+    border: 1px solid var(--fn-border);
+    border-radius: var(--fn-radius-sm);
+    color: var(--fn-text-secondary);
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--fn-transition);
+    flex-shrink: 0;
+}
+
+.fn-settings-btn:hover {
+    border-color: var(--fn-accent);
+    color: var(--fn-accent);
+}
+
+/* تم‌ها */
+.fn-theme-options {
+    gap: 12px;
+}
+
+.fn-theme-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 3px solid var(--fn-border);
+    cursor: pointer;
+    transition: var(--fn-transition);
+}
+
+.fn-theme-btn.active {
+    border-color: var(--fn-accent);
+    box-shadow: 0 0 0 4px var(--fn-accent-light);
+    transform: scale(1.1);
+}
+
+.fn-theme-btn:hover {
+    transform: scale(1.05);
+}
+
+.fn-theme-btn--light { background: #F5F5F5; }
+.fn-theme-btn--dark { background: #1A1A2E; }
+.fn-theme-btn--sepia { background: #F4ECD8; }
+
+/* تراز متن */
+.fn-settings-align-btn {
+    flex: 1;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--fn-bg-primary);
+    border: 1px solid var(--fn-border);
+    border-radius: var(--fn-radius-sm);
+    color: var(--fn-text-muted);
+    cursor: pointer;
+    transition: var(--fn-transition);
+}
+
+.fn-settings-align-btn.active {
+    background: var(--fn-accent-light);
+    border-color: var(--fn-accent);
+    color: var(--fn-accent);
+}
+
+/* ===== دکمه‌های شناور (FAB) ===== */
+.fn-reader-fab {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+    background: var(--fn-bg-secondary);
+    border: 1px solid var(--fn-border);
+    border-radius: var(--fn-radius-xl);
+    padding: 6px;
+    box-shadow: var(--fn-shadow-lg);
+    z-index: 100;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.fn-reader-fab.fn-fab--hidden {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+    pointer-events: none;
+}
+
+.fn-fab-btn {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: var(--fn-text-secondary);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: var(--fn-transition);
+}
+
+.fn-fab-btn:hover {
+    background: var(--fn-accent-light);
+    color: var(--fn-accent);
+}
+
+.fn-fab-btn--settings.active {
+    background: var(--fn-accent);
+    color: #fff;
+}
+
+/* ===== کشوی فهرست فصل‌ها ===== */
+.fn-chapter-drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    display: none;
+}
+
+.fn-chapter-drawer.open {
+    display: block;
+}
+
+.fn-chapter-drawer__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    animation: fnFadeIn 0.3s ease;
+}
+
+@keyframes fnFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.fn-chapter-drawer__panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 380px;
+    max-width: 85vw;
+    height: 100%;
+    background: var(--fn-bg-secondary);
+    box-shadow: var(--fn-shadow-lg);
+    display: flex;
+    flex-direction: column;
+    animation: fnSlideRight 0.3s ease;
+}
+
+@keyframes fnSlideRight {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+}
+
+.fn-chapter-drawer__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--fn-border);
+    flex-shrink: 0;
+}
+
+.fn-chapter-drawer__header h3 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin: 0;
+}
+
+.fn-chapter-drawer__close {
+    color: var(--fn-text-muted);
+    padding: 6px;
+    cursor: pointer;
+}
+
+.fn-chapter-drawer__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 4px 0;
+}
+
+.fn-chapter-drawer__loading {
+    padding: 40px;
+    text-align: center;
+    color: var(--fn-text-muted);
+}
+
+.fn-drawer-chapter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--fn-border);
+    color: var(--fn-text-primary);
+    transition: var(--fn-transition);
+    font-size: 0.88rem;
+}
+
+.fn-drawer-chapter:hover {
+    background: var(--fn-accent-light);
+}
+
+.fn-drawer-chapter--current {
+    background: var(--fn-accent-light);
+    border-right: 3px solid var(--fn-accent);
+}
+
+.fn-drawer-chapter__number {
+    font-weight: 700;
+    color: var(--fn-accent);
+    min-width: 55px;
+    font-size: 0.82rem;
+    flex-shrink: 0;
+}
+
+.fn-drawer-chapter__title {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.fn-drawer-chapter__date {
+    font-size: 0.72rem;
+    color: var(--fn-text-muted);
+    flex-shrink: 0;
+}
+
+.fn-drawer-chapter__badge {
+    font-size: 0.68rem;
+    font-weight: 700;
+    background: var(--fn-accent);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+/* ===== پرامپت بازیابی موقعیت ===== */
+.fn-restore-prompt {
+    position: fixed;
+    bottom: 80px;
+    right: 24px;
+    background: var(--fn-bg-secondary);
+    border: 1px solid var(--fn-border);
+    border-radius: var(--fn-radius-md);
+    padding: 16px 20px;
+    box-shadow: var(--fn-shadow-lg);
+    z-index: 150;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+}
+
+.fn-restore-prompt.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.fn-restore-prompt__actions {
+    display: flex;
+    gap: 8px;
+}
+
+.fn-restore-yes {
+    padding: 6px 16px;
+    background: var(--fn-accent);
+    color: #fff;
+    border-radius: var(--fn-radius-sm);
+    font-weight: 700;
+    font-size: 0.82rem;
+    cursor: pointer;
+    border: none;
+}
+
+.fn-restore-no {
+    padding: 6px 16px;
+    background: var(--fn-bg-primary);
+    color: var(--fn-text-muted);
+    border: 1px solid var(--fn-border);
+    border-radius: var(--fn-radius-sm);
+    font-weight: 700;
+    font-size: 0.82rem;
+    cursor: pointer;
+}
+
+/* ===== نظرات ریدر ===== */
+.fn-reader-comments {
+    max-width: 800px;
+    margin: 40px auto 0;
+    padding: 24px;
+    background: var(--fn-bg-secondary);
+    border-radius: var(--fn-radius-md);
+    box-shadow: var(--fn-shadow-sm);
+}
+
+/* ===== ریسپانسیو ریدر ===== */
+@media (max-width: 768px) {
+    .fn-reader {
+        padding: 0 16px;
+    }
+
+    .fn-reader__chapter-title {
+        font-size: 1.3rem;
+    }
+
+    .fn-reader__meta {
+        gap: 10px;
+    }
+
+    .fn-reader__meta-item {
+        font-size: 0.75rem;
+    }
+
+    .fn-chapter-nav {
+        flex-direction: column;
+        gap: 8px;
+        padding: 12px 16px;
+    }
+
+    .fn-chapter-nav__btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .fn-reader-settings {
+        bottom: 76px;
+        width: auto;
+        right: 12px;
+        left: 12px;
+        transform: none;
+    }
+
+    .fn-reader-fab {
+        bottom: 16px;
+        padding: 4px;
+        gap: 4px;
+    }
+
+    .fn-fab-btn {
+        width: 38px;
+        height: 38px;
+    }
+
+    .fn-chapter-drawer__panel {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .fn-restore-prompt {
+        right: 12px;
+        left: 12px;
+        bottom: 70px;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .fn-reader-comments {
+        margin: 24px 16px 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .fn-reader__header {
+        padding: 20px 0;
+    }
+
+    .fn-reader__novel-title {
+        font-size: 0.82rem;
+    }
+
+    .fn-reader__chapter-title {
+        font-size: 1.1rem;
+    }
+
+    .fn-reader__chapter-subtitle {
+        font-size: 0.88rem;
+    }
+}
+
+/* ===== حالت تمام‌صفحه ===== */
+body.fn-fullscreen .fn-reader-wrapper {
+    padding-top: 20px;
+}
+
+body.fn-fullscreen .fn-chapter-nav--top {
+    display: none;
+}
+
+body.fn-fullscreen .fn-reader__header {
+    padding-top: 10px;
+}
