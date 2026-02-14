@@ -1,0 +1,1457 @@
+/* ═══════════════════════════════════════
+   سیستم احراز هویت - استایل‌ها
+   ═══════════════════════════════════════ */
+
+/* ───── صفحه اصلی ───── */
+.novel-auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 40px 16px;
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    overflow: hidden;
+}
+
+.novel-auth-overlay {
+    position: absolute;
+    inset: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80"><circle cx="40" cy="40" r="1" fill="rgba(255,255,255,0.03)"/></svg>') repeat;
+    background-size: 80px 80px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.novel-auth-container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 460px;
+    animation: novelAuthFadeIn 0.6s ease-out;
+}
+
+@keyframes novelAuthFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ───── کارت Glassmorphism ───── */
+.novel-auth-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    padding: 40px 36px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    color: #e8e8e8;
+}
+
+/* ───── لوگو ───── */
+.novel-auth-logo {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.novel-auth-logo img {
+    max-height: 48px;
+    width: auto;
+}
+
+.novel-auth-logo h1 {
+    font-size: 24px;
+    color: #fff;
+    margin: 0;
+}
+
+.novel-auth-logo a {
+    text-decoration: none;
+}
+
+/* ───── عنوان ───── */
+.novel-auth-title {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.novel-auth-icon {
+    color: #a78bfa;
+    flex-shrink: 0;
+}
+
+.novel-auth-subtitle {
+    text-align: center;
+    color: #b0b0c0;
+    font-size: 14px;
+    margin: 0 0 24px;
+    line-height: 1.6;
+}
+
+/* ───── فرم ───── */
+.novel-auth-form {
+    margin-top: 24px;
+}
+
+/* ───── فیلد ───── */
+.novel-auth-field {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.novel-auth-field label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #c0c0d0;
+    margin-bottom: 8px;
+}
+
+.novel-auth-field label svg {
+    color: #a78bfa;
+    flex-shrink: 0;
+}
+
+.novel-auth-field input[type="text"],
+.novel-auth-field input[type="email"],
+.novel-auth-field input[type="password"] {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    color: #fff;
+    font-size: 15px;
+    font-family: inherit;
+    transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.novel-auth-field input::placeholder {
+    color: #777;
+}
+
+.novel-auth-field input:focus {
+    border-color: #a78bfa;
+    box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.15);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.novel-auth-field input.is-error {
+    border-color: #f87171;
+    box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.15);
+}
+
+.novel-auth-field input.is-success {
+    border-color: #34d399;
+    box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.15);
+}
+
+/* ───── وضعیت فیلد (بررسی نام نمایشی / تطابق رمز) ───── */
+.novel-auth-field-status {
+    display: block;
+    font-size: 12px;
+    margin-top: 6px;
+    min-height: 18px;
+    transition: color 0.3s;
+}
+
+.novel-auth-field-status.is-checking {
+    color: #fbbf24;
+}
+
+.novel-auth-field-status.is-available {
+    color: #34d399;
+}
+
+.novel-auth-field-status.is-taken {
+    color: #f87171;
+}
+
+.novel-auth-field-status.is-match {
+    color: #34d399;
+}
+
+.novel-auth-field-status.is-mismatch {
+    color: #f87171;
+}
+
+/* ───── رمز عبور + چشم ───── */
+.novel-auth-password-wrap {
+    position: relative;
+}
+
+.novel-auth-password-wrap input {
+    padding-left: 48px;
+}
+
+[dir="rtl"] .novel-auth-password-wrap input {
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.novel-auth-toggle-pass {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    color: #888;
+    transition: color 0.3s;
+    display: flex;
+    align-items: center;
+}
+
+[dir="rtl"] .novel-auth-toggle-pass {
+    left: auto;
+    right: auto;
+    left: 12px;
+}
+
+.novel-auth-toggle-pass:hover {
+    color: #a78bfa;
+}
+
+/* ───── نوار قدرت رمز ───── */
+.novel-auth-password-strength {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.novel-auth-strength-bar {
+    flex: 1;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.novel-auth-strength-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 4px;
+    transition: width 0.4s ease, background 0.4s ease;
+}
+
+.novel-auth-strength-fill.strength-weak {
+    width: 33%;
+    background: #f87171;
+}
+
+.novel-auth-strength-fill.strength-medium {
+    width: 66%;
+    background: #fbbf24;
+}
+
+.novel-auth-strength-fill.strength-strong {
+    width: 100%;
+    background: #34d399;
+}
+
+.novel-auth-strength-text {
+    font-size: 12px;
+    font-weight: 600;
+    min-width: 50px;
+    text-align: left;
+}
+
+.novel-auth-strength-text.strength-weak {
+    color: #f87171;
+}
+
+.novel-auth-strength-text.strength-medium {
+    color: #fbbf24;
+}
+
+.novel-auth-strength-text.strength-strong {
+    color: #34d399;
+}
+
+/* ───── ردیف (مرا بسپار + فراموشی) ───── */
+.novel-auth-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* ───── چک‌باکس سفارشی ───── */
+.novel-auth-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #b0b0c0;
+    user-select: none;
+    line-height: 1.4;
+}
+
+.novel-auth-checkbox input[type="checkbox"] {
+    display: none;
+}
+
+.novel-auth-checkmark {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.novel-auth-checkbox input:checked + .novel-auth-checkmark {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-color: transparent;
+}
+
+.novel-auth-checkbox input:checked + .novel-auth-checkmark::after {
+    content: '';
+    width: 6px;
+    height: 10px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    margin-top: -2px;
+}
+
+/* چک‌باکس فانتزی قوانین */
+.novel-auth-checkmark--fancy {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    border-radius: 8px;
+    border-width: 2px;
+}
+
+.novel-auth-checkbox--rules input:checked + .novel-auth-checkmark--fancy {
+    animation: novelCheckPulse 0.4s ease;
+}
+
+@keyframes novelCheckPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.novel-auth-rules-text {
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.novel-auth-rules-text a {
+    color: #a78bfa;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.novel-auth-rules-text a:hover {
+    color: #c4b5fd;
+}
+
+.novel-auth-field--rules {
+    margin-bottom: 24px;
+}
+
+/* ───── لینک فراموشی ───── */
+.novel-auth-forgot-link {
+    font-size: 13px;
+    color: #a78bfa;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.novel-auth-forgot-link:hover {
+    color: #c4b5fd;
+    text-decoration: underline;
+}
+
+/* ───── دکمه اصلی ───── */
+.novel-auth-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 14px 24px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    text-align: center;
+    font-family: inherit;
+    gap: 8px;
+}
+
+.novel-auth-btn--primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+}
+
+.novel-auth-btn--primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 24px rgba(102, 126, 234, 0.4);
+}
+
+.novel-auth-btn--primary:active {
+    transform: translateY(0);
+}
+
+.novel-auth-btn--primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.novel-auth-btn--secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: #e0e0e0;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    margin-top: 12px;
+}
+
+.novel-auth-btn--secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* ───── اسپینر ───── */
+.novel-spinner {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: novelSpin 0.7s linear infinite;
+}
+
+@keyframes novelSpin {
+    to { transform: rotate(360deg); }
+}
+
+/* ───── پیام‌ها ───── */
+.novel-auth-messages {
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    line-height: 1.7;
+    animation: novelAuthFadeIn 0.3s ease;
+}
+
+.novel-auth-messages.is-error {
+    background: rgba(248, 113, 113, 0.12);
+    border: 1px solid rgba(248, 113, 113, 0.3);
+    color: #fca5a5;
+}
+
+.novel-auth-messages.is-success {
+    background: rgba(52, 211, 153, 0.12);
+    border: 1px solid rgba(52, 211, 153, 0.3);
+    color: #6ee7b7;
+}
+
+.novel-auth-messages.is-warning {
+    background: rgba(251, 191, 36, 0.12);
+    border: 1px solid rgba(251, 191, 36, 0.3);
+    color: #fde68a;
+}
+
+/* ───── فوتر کارت ───── */
+.novel-auth-footer {
+    text-align: center;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.novel-auth-footer p {
+    margin: 0;
+    font-size: 14px;
+    color: #999;
+}
+
+.novel-auth-footer a {
+    color: #a78bfa;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.novel-auth-footer a:hover {
+    color: #c4b5fd;
+    text-decoration: underline;
+}
+
+/* ═══════════════════════════════════════
+   صفحه تأیید ایمیل
+   ═══════════════════════════════════════ */
+.novel-auth-result {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.novel-auth-result-icon {
+    font-size: 56px;
+    margin-bottom: 16px;
+    line-height: 1;
+}
+
+.novel-auth-result h2 {
+    font-size: 20px;
+    color: #fff;
+    margin: 0 0 12px;
+}
+
+.novel-auth-result p {
+    color: #b0b0c0;
+    font-size: 14px;
+    line-height: 1.8;
+    margin: 0 0 20px;
+}
+
+.novel-auth-result-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 24px;
+}
+
+/* نمایش ایمیل */
+.novel-verify-email-display {
+    background: rgba(167, 139, 250, 0.1);
+    border: 1px solid rgba(167, 139, 250, 0.2);
+    border-radius: 12px;
+    padding: 14px 20px;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.novel-verify-email-label {
+    font-size: 13px;
+    color: #999;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.novel-verify-email-address {
+    font-size: 16px;
+    color: #a78bfa;
+    direction: ltr;
+    unicode-bidi: bidi-override;
+}
+
+/* محدودیت‌ها */
+.novel-verify-restrictions {
+    background: rgba(251, 191, 36, 0.08);
+    border: 1px solid rgba(251, 191, 36, 0.2);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 20px 0;
+    text-align: right;
+}
+
+.novel-verify-restrictions h4 {
+    font-size: 14px;
+    color: #fbbf24;
+    margin: 0 0 10px;
+}
+
+.novel-verify-restrictions ul {
+    margin: 0;
+    padding: 0 20px;
+    list-style: disc;
+}
+
+.novel-verify-restrictions li {
+    color: #d0d0d0;
+    font-size: 13px;
+    line-height: 2;
+}
+
+/* ارسال مجدد */
+.novel-resend-info {
+    text-align: center;
+    margin-top: 12px;
+    font-size: 13px;
+    color: #999;
+}
+
+.novel-resend-cooldown {
+    color: #fbbf24;
+    font-weight: 600;
+}
+
+/* ═══════════════════════════════════════
+   سیستم آواتار در داشبورد
+   ═══════════════════════════════════════ */
+.novel-avatar-section {
+    margin: 24px 0;
+}
+
+.novel-avatar-section h3 {
+    font-size: 16px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.novel-avatar-current {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.novel-avatar-current img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid var(--primary-color, #667eea);
+    object-fit: cover;
+}
+
+.novel-avatar-grid-toggle {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.novel-avatar-grid-toggle button {
+    background: rgba(102, 126, 234, 0.15);
+    color: var(--primary-color, #667eea);
+    border: 1px solid rgba(102, 126, 234, 0.3);
+    padding: 8px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: inherit;
+    transition: all 0.3s;
+}
+
+.novel-avatar-grid-toggle button:hover {
+    background: rgba(102, 126, 234, 0.25);
+}
+
+.novel-avatar-grid {
+    display: none;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+    max-height: 320px;
+    overflow-y: auto;
+    padding: 16px;
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.novel-avatar-grid.is-open {
+    display: grid;
+}
+
+.novel-avatar-grid-item {
+    position: relative;
+    cursor: pointer;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid transparent;
+    transition: all 0.3s;
+    aspect-ratio: 1;
+}
+
+.novel-avatar-grid-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.novel-avatar-grid-item:hover {
+    border-color: rgba(102, 126, 234, 0.5);
+    transform: scale(1.08);
+}
+
+.novel-avatar-grid-item.is-selected {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+}
+
+.novel-avatar-grid-item.is-selected::after {
+    content: '✓';
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    background: #34d399;
+    color: #fff;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.novel-avatar-save-wrap {
+    text-align: center;
+    margin-top: 16px;
+    display: none;
+}
+
+.novel-avatar-save-wrap.is-visible {
+    display: block;
+}
+
+/* ═══════════════════════════════════════
+   ریسپانسیو
+   ═══════════════════════════════════════ */
+@media (max-width: 480px) {
+    .novel-auth-card {
+        padding: 28px 20px;
+        border-radius: 16px;
+    }
+
+    .novel-auth-page {
+        padding: 20px 12px;
+    }
+
+    .novel-auth-title {
+        font-size: 18px;
+    }
+
+    .novel-auth-result-actions {
+        flex-direction: column;
+    }
+
+    .novel-avatar-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+    }
+}
+
+/* ═══════════════════════════════════════
+   دارک‌مود (اگر سایت قبلاً دارک نباشه)
+   ═══════════════════════════════════════ */
+body.light-mode .novel-auth-page {
+    background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 50%, #e8eaf6 100%);
+}
+
+body.light-mode .novel-auth-card {
+    background: rgba(255, 255, 255, 0.85);
+    border-color: rgba(0, 0, 0, 0.08);
+    color: #333;
+}
+
+body.light-mode .novel-auth-title {
+    color: #222;
+}
+
+body.light-mode .novel-auth-field input {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: rgba(0, 0, 0, 0.12);
+    color: #333;
+}
+
+body.light-mode .novel-auth-field input::placeholder {
+    color: #aaa;
+}
+
+body.light-mode .novel-auth-field label {
+    color: #555;
+}
+
+body.light-mode .novel-auth-checkbox {
+    color: #555;
+}
+
+body.light-mode .novel-auth-footer p {
+    color: #777;
+}
+
+body.light-mode .novel-auth-logo h1 {
+    color: #333;
+}
+
+body.light-mode .novel-auth-result h2 {
+    color: #222;
+}
+
+body.light-mode .novel-auth-result p {
+    color: #666;
+}
+
+body.light-mode .novel-verify-restrictions {
+    background: rgba(251, 191, 36, 0.08);
+}
+
+body.light-mode .novel-verify-restrictions li {
+    color: #555;
+}
+
+body.light-mode .novel-auth-subtitle {
+    color: #666;
+}
+
+
+/* ═══════════════════════════════════════
+   داشبورد — پروفایل + تغییر رمز + تغییر ایمیل
+   ═══════════════════════════════════════ */
+
+/* گرید پروفایل */
+.novel-dashboard-profile-grid {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+@media (max-width: 768px) {
+    .novel-dashboard-profile-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+}
+
+/* کارت داشبورد */
+.novel-dashboard-card {
+    background: var(--card-bg, #fff);
+    border: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+    transition: box-shadow 0.3s;
+}
+
+.novel-dashboard-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.novel-dashboard-card-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--primary-color, #667eea);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-color, #333);
+}
+
+/* دکمه‌های داشبورد */
+.novel-dashboard-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 24px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: inherit;
+    text-decoration: none;
+}
+
+.novel-dashboard-btn--primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.novel-dashboard-btn--primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+}
+
+.novel-dashboard-btn--primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.novel-dashboard-btn--primary.is-saved {
+    background: linear-gradient(135deg, #34d399, #059669);
+}
+
+.novel-dashboard-btn--outline {
+    background: transparent;
+    color: var(--primary-color, #667eea);
+    border: 2px solid var(--primary-color, #667eea);
+}
+
+.novel-dashboard-btn--outline:hover {
+    background: var(--primary-color, #667eea);
+    color: #fff;
+}
+
+/* آواتار فعلی */
+.novel-avatar-current {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.novel-avatar-current img {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    border: 4px solid var(--primary-color, #667eea);
+    object-fit: cover;
+    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.2);
+    transition: transform 0.3s;
+}
+
+.novel-avatar-current img:hover {
+    transform: scale(1.05);
+}
+
+.novel-avatar-current-label {
+    font-size: 13px;
+    color: var(--text-muted, #888);
+    margin-top: 10px;
+}
+
+/* گرید آواتار */
+.novel-avatar-grid-toggle {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.novel-avatar-grid {
+    display: none;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+    max-height: 340px;
+    overflow-y: auto;
+    padding: 16px;
+    background: var(--bg-light, rgba(0, 0, 0, 0.02));
+    border-radius: 12px;
+    border: 1px solid var(--border-color, rgba(0, 0, 0, 0.06));
+    scrollbar-width: thin;
+}
+
+.novel-avatar-grid.is-open {
+    display: grid;
+}
+
+.novel-avatar-grid-item {
+    position: relative;
+    cursor: pointer;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid transparent;
+    transition: all 0.3s ease;
+    aspect-ratio: 1;
+    background: var(--bg-light, #f5f5f5);
+}
+
+.novel-avatar-grid-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 50%;
+}
+
+.novel-avatar-grid-item:hover {
+    border-color: rgba(102, 126, 234, 0.5);
+    transform: scale(1.1);
+}
+
+.novel-avatar-grid-item.is-selected {
+    border-color: #667eea;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.25);
+    transform: scale(1.05);
+}
+
+.novel-avatar-grid-item.is-selected::after {
+    content: '✓';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: #34d399;
+    color: #fff;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    border: 2px solid #fff;
+}
+
+.novel-avatar-save-wrap {
+    text-align: center;
+    margin-top: 16px;
+    display: none;
+}
+
+.novel-avatar-save-wrap.is-visible {
+    display: block;
+    animation: novelAuthFadeIn 0.3s ease;
+}
+
+/* فیلدها در داشبورد */
+.novel-dashboard-form .novel-auth-field input,
+#new-email-input,
+#email-change-code-input {
+    background: var(--input-bg, #f8f9fa);
+    border: 1px solid var(--border-color, #dde1e7);
+    color: var(--text-color, #333);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 15px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    font-family: inherit;
+}
+
+.novel-dashboard-form .novel-auth-field input:focus,
+#new-email-input:focus,
+#email-change-code-input:focus {
+    border-color: var(--primary-color, #667eea);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.12);
+    outline: none;
+}
+
+.novel-dashboard-form .novel-auth-field label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-color, #555);
+    margin-bottom: 8px;
+    display: block;
+}
+
+.novel-dashboard-field-help {
+    margin-top: 8px;
+}
+
+.novel-dashboard-field-help small {
+    font-size: 12px;
+    color: var(--text-muted, #999);
+    line-height: 1.6;
+}
+
+/* ایمیل فعلی */
+.novel-dashboard-current-email {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 12px 16px;
+    background: var(--bg-light, #f8f9fa);
+    border-radius: 10px;
+    border: 1px solid var(--border-color, #eee);
+}
+
+.novel-dashboard-label {
+    font-size: 14px;
+    color: var(--text-muted, #888);
+}
+
+.novel-dashboard-email-value {
+    font-size: 15px;
+    color: var(--primary-color, #667eea);
+}
+
+/* اعلان‌های داشبورد */
+.novel-dashboard-alert {
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 16px;
+}
+
+.novel-dashboard-alert--success {
+    background: rgba(52, 211, 153, 0.1);
+    border: 1px solid rgba(52, 211, 153, 0.3);
+    color: #059669;
+}
+
+.novel-dashboard-alert--error {
+    background: rgba(248, 113, 113, 0.1);
+    border: 1px solid rgba(248, 113, 113, 0.3);
+    color: #dc2626;
+}
+
+.novel-dashboard-alert--warning {
+    background: rgba(251, 191, 36, 0.08);
+    border: 1px solid rgba(251, 191, 36, 0.3);
+    color: #d97706;
+}
+
+.novel-dashboard-alert--info {
+    background: rgba(102, 126, 234, 0.06);
+    border: 1px solid rgba(102, 126, 234, 0.2);
+    color: #667eea;
+    font-size: 13px;
+}
+
+/* ═══════════════════════════════════════
+   فاصله هدر
+   ═══════════════════════════════════════ */
+.novel-auth-page {
+    padding-top: 60px;
+}
+
+body .page-user-dashboard,
+body .dashboard-content,
+body .user-dashboard-wrap {
+    padding-top: 24px;
+    margin-top: 16px;
+}
+
+/* ═══════════════════════════════════════
+   دکمه‌های ورود/ثبت‌نام هدر — موبایل
+   ═══════════════════════════════════════ */
+.auth-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.auth-buttons .btn-login,
+.auth-buttons .btn-register {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+    white-space: nowrap;
+}
+
+.auth-buttons .btn-login {
+    color: var(--primary-color, #667eea);
+    border: 1px solid var(--primary-color, #667eea);
+    background: transparent;
+}
+
+.auth-buttons .btn-login:hover {
+    background: var(--primary-color, #667eea);
+    color: #fff;
+}
+
+.auth-buttons .btn-register {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    border: none;
+}
+
+.auth-buttons .btn-register:hover {
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+}
+
+/* ═══════════════════════════════════════
+   داشبورد موبایل — ریسپانسیو
+   ═══════════════════════════════════════ */
+@media (max-width: 768px) {
+    /* منوی کشویی داشبورد */
+    .dashboard-sidebar,
+    .user-dashboard-sidebar,
+    .novel-dashboard-sidebar {
+        position: fixed;
+        top: 0;
+        right: -280px;
+        width: 270px;
+        height: 100vh;
+        z-index: 1000;
+        background: var(--card-bg, #fff);
+        box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
+        transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow-y: auto;
+        padding: 20px 16px;
+        padding-top: 70px;
+    }
+
+    .dashboard-sidebar.is-open,
+    .user-dashboard-sidebar.is-open,
+    .novel-dashboard-sidebar.is-open {
+        right: 0;
+    }
+
+    /* اورلی */
+    .novel-dashboard-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 999;
+        backdrop-filter: blur(2px);
+    }
+
+    .novel-dashboard-overlay.is-active {
+        display: block;
+    }
+
+    /* دکمه همبرگر — پایین سمت راست */
+    .novel-dashboard-menu-toggle {
+        display: flex !important;
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        z-index: 1001;
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: #fff;
+        border: none;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        cursor: pointer;
+        box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+        transition: transform 0.3s;
+    }
+
+    .novel-dashboard-menu-toggle:hover {
+        transform: scale(1.08);
+    }
+
+    /* گرید آواتار موبایل */
+    .novel-avatar-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        max-height: 260px;
+    }
+
+    /* کارت‌ها */
+    .novel-dashboard-card {
+        padding: 18px 14px;
+        border-radius: 12px;
+    }
+
+    /* فاصله بالا */
+    .novel-auth-page {
+        padding-top: 50px;
+        padding-bottom: 80px;
+    }
+
+    /* دکمه‌های ورود/ثبت‌نام موبایل */
+    .auth-buttons {
+        display: flex !important;
+        gap: 6px;
+    }
+
+    .auth-buttons .btn-login,
+    .auth-buttons .btn-register {
+        padding: 5px 12px;
+        font-size: 12px;
+    }
+
+    /* password wrap در داشبورد */
+    .novel-dashboard-form .novel-auth-password-wrap {
+        position: relative;
+    }
+
+    .novel-dashboard-form .novel-auth-toggle-pass {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 4px;
+        color: #888;
+    }
+}
+
+/* دکمه همبرگر — دسکتاپ مخفی */
+@media (min-width: 769px) {
+    .novel-dashboard-menu-toggle {
+        display: none !important;
+    }
+
+    .novel-dashboard-overlay {
+        display: none !important;
+    }
+}
+
+/* password wrap در داشبورد — دسکتاپ */
+.novel-dashboard-form .novel-auth-password-wrap {
+    position: relative;
+}
+
+.novel-dashboard-form .novel-auth-password-wrap input {
+    padding-left: 48px;
+}
+
+[dir="rtl"] .novel-dashboard-form .novel-auth-password-wrap input {
+    padding-left: 48px;
+    padding-right: 16px;
+}
+
+.novel-dashboard-form .novel-auth-toggle-pass {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    color: #888;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s;
+}
+
+.novel-dashboard-form .novel-auth-toggle-pass:hover {
+    color: var(--primary-color, #667eea);
+}
+
+/* ═══════════════════════════════════════
+   دارکمود — داشبورد
+   ═══════════════════════════════════════ */
+body.dark-mode .novel-dashboard-card,
+[data-theme="dark"] .novel-dashboard-card {
+    background: #1e1e2e;
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark-mode .novel-dashboard-card-title,
+[data-theme="dark"] .novel-dashboard-card-title {
+    color: #e0e0e0;
+    border-bottom-color: #667eea;
+}
+
+body.dark-mode .novel-dashboard-form .novel-auth-field input,
+body.dark-mode #new-email-input,
+body.dark-mode #email-change-code-input,
+[data-theme="dark"] .novel-dashboard-form .novel-auth-field input,
+[data-theme="dark"] #new-email-input,
+[data-theme="dark"] #email-change-code-input {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.12);
+    color: #e0e0e0;
+}
+
+body.dark-mode .novel-dashboard-form .novel-auth-field input:focus,
+body.dark-mode #new-email-input:focus,
+body.dark-mode #email-change-code-input:focus,
+[data-theme="dark"] .novel-dashboard-form .novel-auth-field input:focus,
+[data-theme="dark"] #new-email-input:focus,
+[data-theme="dark"] #email-change-code-input:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+body.dark-mode .novel-dashboard-form .novel-auth-field label,
+[data-theme="dark"] .novel-dashboard-form .novel-auth-field label {
+    color: #c0c0d0;
+}
+
+body.dark-mode .novel-dashboard-current-email,
+[data-theme="dark"] .novel-dashboard-current-email {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark-mode .novel-dashboard-alert--success,
+[data-theme="dark"] .novel-dashboard-alert--success {
+    background: rgba(52, 211, 153, 0.08);
+    color: #6ee7b7;
+}
+
+body.dark-mode .novel-dashboard-alert--error,
+[data-theme="dark"] .novel-dashboard-alert--error {
+    background: rgba(248, 113, 113, 0.08);
+    color: #fca5a5;
+}
+
+body.dark-mode .novel-dashboard-alert--warning,
+[data-theme="dark"] .novel-dashboard-alert--warning {
+    background: rgba(251, 191, 36, 0.06);
+    color: #fde68a;
+}
+
+body.dark-mode .novel-dashboard-alert--info,
+[data-theme="dark"] .novel-dashboard-alert--info {
+    background: rgba(102, 126, 234, 0.08);
+    color: #a5b4fc;
+}
+
+body.dark-mode .novel-avatar-grid,
+[data-theme="dark"] .novel-avatar-grid {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.06);
+}
+
+body.dark-mode .novel-avatar-grid-item,
+[data-theme="dark"] .novel-avatar-grid-item {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .novel-dashboard-btn--outline,
+[data-theme="dark"] .novel-dashboard-btn--outline {
+    color: #a5b4fc;
+    border-color: #a5b4fc;
+}
+
+body.dark-mode .novel-dashboard-btn--outline:hover,
+[data-theme="dark"] .novel-dashboard-btn--outline:hover {
+    background: #667eea;
+    color: #fff;
+}
+
+body.dark-mode .auth-buttons .btn-login,
+[data-theme="dark"] .auth-buttons .btn-login {
+    color: #a5b4fc;
+    border-color: #a5b4fc;
+}
+
+body.dark-mode .auth-buttons .btn-login:hover,
+[data-theme="dark"] .auth-buttons .btn-login:hover {
+    background: #667eea;
+    color: #fff;
+}
+
+/* چکباکس داشبورد */
+.novel-dashboard-card .novel-auth-checkbox {
+    color: var(--text-color, #555);
+    font-size: 14px;
+}
+
+body.dark-mode .novel-dashboard-card .novel-auth-checkbox,
+[data-theme="dark"] .novel-dashboard-card .novel-auth-checkbox {
+    color: #c0c0d0;
+}
