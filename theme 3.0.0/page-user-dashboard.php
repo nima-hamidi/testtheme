@@ -95,13 +95,15 @@ $nav_groups = [
     ],
 ];
 
-// Author nav group
+// Author nav group + اصلاحیه فاز 3
 if ($is_author) {
     $nav_groups['author'] = [
         'label' => 'نویسنده',
         'items' => [
             'my-novels'      => ['icon' => '📖', 'label' => 'رمان‌های من'],
+            'add-novel'      => ['icon' => '✏️', 'label' => 'افزودن رمان'],
             'my-chapters'    => ['icon' => '📄', 'label' => 'قسمت‌های من'],
+            'add-chapter'    => ['icon' => '📝', 'label' => 'افزودن قسمت'],
             'author-stats'   => ['icon' => '📈', 'label' => 'آمار'],
             'author-income'  => ['icon' => '💰', 'label' => 'درآمد'],
             'author-banners' => ['icon' => '🖼', 'label' => 'بنرها'],
@@ -190,10 +192,16 @@ if ($is_author) {
         <div class="dashboard__main">
             <div class="dashboard__content">
                 <?php
-                // Load initial tab content (server-side for first load)
-                $tab_templates = [
-                    'overview' => 'templates/dashboard/overview.php',
-                    'profile'  => 'templates/dashboard/profile-edit.php',
+                // Load initial tab content (server-side for first load) + اصلاحیه فاز 3
+               $tab_templates = [
+                    'overview'     => 'templates/dashboard/overview.php',
+                    'profile'      => 'templates/dashboard/profile-edit.php',
+                    'my-novels'    => 'templates/dashboard/my-novels.php',
+                    'add-novel'    => 'templates/dashboard/add-novel.php',
+                    'my-chapters'  => 'templates/dashboard/my-chapters.php',
+                    'add-chapter'  => 'templates/dashboard/add-chapter.php',
+                    'edit-novel'   => 'templates/dashboard/edit-novel.php',
+                    'edit-chapter' => 'templates/dashboard/edit-chapter.php',
                 ];
 
                 $template_file = isset($tab_templates[$current_tab]) ? $tab_templates[$current_tab] : 'templates/dashboard/overview.php';

@@ -62,6 +62,10 @@ require_once NOVEL_INC . 'custom-post-types.php';
 require_once NOVEL_INC . 'taxonomies.php';
 require_once NOVEL_INC . 'meta-boxes.php';
 require_once NOVEL_INC . 'breadcrumbs.php';
+/*فاز 3*/
+require_once NOVEL_INC . 'class-novel-volumes.php';
+
+
 
 // ═══════════════════════════════════════
 // لود شرطی ماژول‌ها بر اساس تنظیمات
@@ -95,6 +99,13 @@ foreach ($novel_modules as $slug => $file) {
         require_once $file_path;
     }
 }
+
+/*فاز3*/
+function novel_init_volumes() {
+    new Novel_Volumes();
+}
+add_action('init', 'novel_init_volumes', 15);
+
 
 // ═══════════════════════════════════════
 // لود فایل‌های ادمین
@@ -230,6 +241,64 @@ function novel_enqueue_assets() {
         wp_enqueue_script('novel-comments', NOVEL_ASSETS . 'js/comments.js', ['novel-main'], NOVEL_VERSION, true);
     }
 }
+
+
+/*فاز 3*/
+
+// ← کل این تابع رو بعدش اضافه کن:
+function novel_phase3_enqueue_scripts() {
+    if (is_singular('chapter')) {
+        wp_enqueue_style(
+            'novel-reader',
+            get_template_directory_uri() . '/assets/css/reader.css',
+            ['novel-main'],
+            NOVEL_VERSION
+        );
+        wp_enqueue_script(
+            'novel-reader',
+            get_template_directory_uri() . '/assets/js/reader.js',
+            ['jquery'],
+            NOVEL_VERSION,
+            true
+        );
+        wp_localize_script('novel-reader', 'novelReader', [
+            'ajaxUrl'    => admin_url('admin-ajax.php'),
+            'nonce'      => wp_create_nonce('novel_reader_action'),
+            'chapterId'  => get_the_ID(),
+            'novelId'    => get_post_meta(get_the_ID(), 'chapter_novel_id', true),
+            'isLoggedIn' => is_user_logged_in(),
+        ]);
+    }
+
+    if (is_singular('novel') || is_post_type_archive('novel') || is_tax('genre') || is_tax('novel_tag') || is_tax('novel_status')) {
+        wp_enqueue_script(
+            'novel-chapters',
+            get_template_directory_uri() . '/assets/js/chapters.js',
+            ['jquery'],
+            NOVEL_VERSION,
+            true
+        );
+        wp_localize_script('novel-chapters', 'novelChapters', [
+            'ajaxUrl' => admin_url('admin-ajax.php'),
+            'nonce'   => wp_create_nonce('novel_chapters_action'),
+        ]);
+
+        wp_enqueue_script(
+            'novel-filter',
+            get_template_directory_uri() . '/assets/js/filter.js',
+            ['jquery'],
+            NOVEL_VERSION,
+            true
+        );
+        wp_localize_script('novel-filter', 'novelFilter', [
+            'ajaxUrl' => admin_url('admin-ajax.php'),
+            'nonce'   => wp_create_nonce('novel_filter_action'),
+        ]);
+    }
+}
+add_action('wp_enqueue_scripts', 'novel_phase3_enqueue_scripts');
+
+
 
 // ═══════════════════════════════════════
 // Theme Setup
@@ -879,3 +948,509 @@ function suspended_starter_activation() {
     flush_rewrite_rules();
 }
 add_action('after_switch_theme', 'suspended_starter_activation');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * ═══ فاز ۳ - AJAX Handlers + Enqueue ═══
+ * 
+ * اضافه به functions.php
+ */
+
+// ═══════════════════════════════════════════
+// AJAX: Chapter Vote (Like/Dislike)
+// ═══════════════════════════════════════════
+
+function novel_ajax_chapter_vote() {
+    check_ajax_referer('novel_reader_action', 'nonce');
+    
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'ابتدا وارد شوید']);
+    }
+    
+    $chapter_id = absint($_POST['chapter_id'] ?? 0);
+    $vote_type  = sanitize_text_field($_POST['vote_type'] ?? '');
+    $user_id    = get_current_user_id();
+    
+    if (!$chapter_id || !in_array($vote_type, ['like', 'dislike'])) {
+        wp_send_json_error(['message' => 'داده نامعتبر']);
+    }
+    
+    global $wpdb;
+    $table = $wpdb->prefix . 'chapter_votes';
+    
+    // Create table if not exists
+    $wpdb->query("CREATE TABLE IF NOT EXISTS {$table} (
+        id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        user_id BIGINT UNSIGNED NOT NULL,
+        chapter_id BIGINT UNSIGNED NOT NULL,
+        vote_type VARCHAR(10) NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE KEY user_chapter (user_id, chapter_id)
+    ) {$wpdb->get_charset_collate()}");
+    
+    // Check existing vote
+    $existing = $wpdb->get_var($wpdb->prepare(
+        "SELECT vote_type FROM {$table} WHERE user_id = %d AND chapter_id = %d",
+        $user_id, $chapter_id
+    ));
+    
+    $new_vote = '';
+    
+    if ($existing === $vote_type) {
+        // Remove vote (toggle off)
+        $wpdb->delete($table, ['user_id' => $user_id, 'chapter_id' => $chapter_id]);
+        $new_vote = '';
+    } elseif ($existing) {
+        // Change vote
+        $wpdb->update($table, ['vote_type' => $vote_type], ['user_id' => $user_id, 'chapter_id' => $chapter_id]);
+        $new_vote = $vote_type;
+    } else {
+        // New vote
+        $wpdb->insert($table, [
+            'user_id'    => $user_id,
+            'chapter_id' => $chapter_id,
+            'vote_type'  => $vote_type,
+        ]);
+        $new_vote = $vote_type;
+    }
+    
+    // Recount
+    $likes    = (int) $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$table} WHERE chapter_id = %d AND vote_type = 'like'", $chapter_id));
+    $dislikes = (int) $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$table} WHERE chapter_id = %d AND vote_type = 'dislike'", $chapter_id));
+    
+    update_post_meta($chapter_id, 'chapter_likes', $likes);
+    update_post_meta($chapter_id, 'chapter_dislikes', $dislikes);
+    
+    $total = $likes + $dislikes;
+    $satisfaction = $total > 0 ? round(($likes / $total) * 100) : 0;
+    $sat_class = $satisfaction >= 80 ? 'good' : ($satisfaction >= 50 ? 'mid' : 'bad');
+    
+    wp_send_json_success([
+        'likes'        => number_format_i18n($likes),
+        'dislikes'     => number_format_i18n($dislikes),
+        'user_vote'    => $new_vote,
+        'satisfaction' => $satisfaction,
+        'sat_class'    => $sat_class,
+    ]);
+}
+add_action('wp_ajax_novel_chapter_vote', 'novel_ajax_chapter_vote');
+
+// ═══════════════════════════════════════════
+// AJAX: Report Chapter
+// ═══════════════════════════════════════════
+
+function novel_ajax_report_chapter() {
+    check_ajax_referer('novel_reader_action', 'nonce');
+    
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'ابتدا وارد شوید']);
+    }
+    
+    $chapter_id  = absint($_POST['chapter_id'] ?? 0);
+    $reason      = sanitize_text_field($_POST['reason'] ?? '');
+    $description = sanitize_textarea_field($_POST['description'] ?? '');
+    $user_id     = get_current_user_id();
+    
+    $valid_reasons = ['typo', 'translation', 'inappropriate', 'duplicate', 'broken', 'other'];
+    
+    if (!$chapter_id || !in_array($reason, $valid_reasons)) {
+        wp_send_json_error(['message' => 'داده نامعتبر']);
+    }
+    
+    global $wpdb;
+    $table = $wpdb->prefix . 'reports';
+    
+    // Create table if not exists
+    $wpdb->query("CREATE TABLE IF NOT EXISTS {$table} (
+        id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        user_id BIGINT UNSIGNED NOT NULL,
+        reported_type VARCHAR(20) NOT NULL,
+        reported_id BIGINT UNSIGNED NOT NULL,
+        reason VARCHAR(50) NOT NULL,
+        description TEXT,
+        status VARCHAR(20) DEFAULT 'pending',
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        INDEX idx_status (status),
+        INDEX idx_reported (reported_type, reported_id)
+    ) {$wpdb->get_charset_collate()}");
+    
+    // Check duplicate report from same user
+    $exists = $wpdb->get_var($wpdb->prepare(
+        "SELECT COUNT(*) FROM {$table} WHERE user_id = %d AND reported_type = 'chapter' AND reported_id = %d AND status = 'pending'",
+        $user_id, $chapter_id
+    ));
+    
+    if ($exists) {
+        wp_send_json_error(['message' => 'شما قبلاً این قسمت را گزارش داده‌اید']);
+    }
+    
+    $wpdb->insert($table, [
+        'user_id'       => $user_id,
+        'reported_type' => 'chapter',
+        'reported_id'   => $chapter_id,
+        'reason'        => $reason,
+        'description'   => mb_substr($description, 0, 500),
+        'status'        => 'pending',
+        'created_at'    => current_time('mysql'),
+    ]);
+    
+    wp_send_json_success(['message' => 'گزارش ارسال شد']);
+}
+add_action('wp_ajax_novel_report_chapter', 'novel_ajax_report_chapter');
+
+// ═══════════════════════════════════════════
+// AJAX: Toggle Follow Novel
+// ═══════════════════════════════════════════
+
+function novel_ajax_toggle_follow() {
+    check_ajax_referer('novel_follow', 'nonce');
+    
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'ابتدا وارد شوید']);
+    }
+    
+    $novel_id = absint($_POST['novel_id'] ?? 0);
+    $user_id  = get_current_user_id();
+    
+    if (!$novel_id) {
+        wp_send_json_error(['message' => 'داده نامعتبر']);
+    }
+    
+    global $wpdb;
+    $table = $wpdb->prefix . 'novel_follows';
+    
+    // Create table if not exists
+    $wpdb->query("CREATE TABLE IF NOT EXISTS {$table} (
+        id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        user_id BIGINT UNSIGNED NOT NULL,
+        novel_id BIGINT UNSIGNED NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE KEY user_novel (user_id, novel_id)
+    ) {$wpdb->get_charset_collate()}");
+    
+    $exists = $wpdb->get_var($wpdb->prepare(
+        "SELECT id FROM {$table} WHERE user_id = %d AND novel_id = %d",
+        $user_id, $novel_id
+    ));
+    
+    if ($exists) {
+        $wpdb->delete($table, ['id' => $exists]);
+        $following = false;
+    } else {
+        $wpdb->insert($table, [
+            'user_id'    => $user_id,
+            'novel_id'   => $novel_id,
+            'created_at' => current_time('mysql'),
+        ]);
+        $following = true;
+    }
+    
+    // Update count
+    $count = (int) $wpdb->get_var($wpdb->prepare(
+        "SELECT COUNT(*) FROM {$table} WHERE novel_id = %d",
+        $novel_id
+    ));
+    update_post_meta($novel_id, 'novel_follow_count', $count);
+    
+    wp_send_json_success([
+        'following' => $following,
+        'count'     => number_format_i18n($count),
+    ]);
+}
+add_action('wp_ajax_novel_toggle_follow', 'novel_ajax_toggle_follow');
+
+// ═══════════════════════════════════════════
+// AJAX: Update Library Status
+// ═══════════════════════════════════════════
+
+function novel_ajax_update_library() {
+    check_ajax_referer('novel_library', 'nonce');
+    
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'ابتدا وارد شوید']);
+    }
+    
+    $novel_id = absint($_POST['novel_id'] ?? 0);
+    $status   = sanitize_text_field($_POST['status'] ?? '');
+    $user_id  = get_current_user_id();
+    
+    $valid_statuses = ['reading', 'plan', 'completed', 'on_hold', 'dropped', 'remove'];
+    
+    if (!$novel_id || !in_array($status, $valid_statuses)) {
+        wp_send_json_error(['message' => 'داده نامعتبر']);
+    }
+    
+    global $wpdb;
+    $table = $wpdb->prefix . 'user_library';
+    
+    // Create table if not exists
+    $wpdb->query("CREATE TABLE IF NOT EXISTS {$table} (
+        id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        user_id BIGINT UNSIGNED NOT NULL,
+        novel_id BIGINT UNSIGNED NOT NULL,
+        status VARCHAR(20) NOT NULL DEFAULT 'reading',
+        last_chapter_id BIGINT UNSIGNED DEFAULT 0,
+        progress_percent TINYINT UNSIGNED DEFAULT 0,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        UNIQUE KEY user_novel (user_id, novel_id)
+    ) {$wpdb->get_charset_collate()}");
+    
+    $labels = [
+        'reading'   => '📖 در حال خواندن',
+        'plan'      => '📋 می‌خوام بخوانم',
+        'completed' => '✅ تکمیل شده',
+        'on_hold'   => '⏸ نگه‌داشته',
+        'dropped'   => '❌ رها شده',
+    ];
+    
+    if ($status === 'remove') {
+        $wpdb->delete($table, ['user_id' => $user_id, 'novel_id' => $novel_id]);
+        
+        // Update bookmark count
+        $count = (int) $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$table} WHERE novel_id = %d", $novel_id));
+        update_post_meta($novel_id, 'novel_bookmark_count', $count);
+        
+        wp_send_json_success([
+            'removed' => true,
+            'message' => 'از کتابخانه حذف شد',
+        ]);
+    }
+    
+    $existing = $wpdb->get_var($wpdb->prepare(
+        "SELECT id FROM {$table} WHERE user_id = %d AND novel_id = %d",
+        $user_id, $novel_id
+    ));
+    
+    if ($existing) {
+        $wpdb->update($table, 
+            ['status' => $status, 'updated_at' => current_time('mysql')],
+            ['id' => $existing]
+        );
+    } else {
+        $wpdb->insert($table, [
+            'user_id'    => $user_id,
+            'novel_id'   => $novel_id,
+            'status'     => $status,
+            'created_at' => current_time('mysql'),
+            'updated_at' => current_time('mysql'),
+        ]);
+    }
+    
+    // Update bookmark count
+    $count = (int) $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$table} WHERE novel_id = %d", $novel_id));
+    update_post_meta($novel_id, 'novel_bookmark_count', $count);
+    
+    wp_send_json_success([
+        'removed' => false,
+        'label'   => $labels[$status] ?? $status,
+        'message' => 'کتابخانه به‌روز شد',
+    ]);
+}
+add_action('wp_ajax_novel_update_library', 'novel_ajax_update_library');
+
+// ═══════════════════════════════════════════
+// AJAX: Purchase Chapter with Coins
+// ═══════════════════════════════════════════
+
+function novel_ajax_purchase_chapter() {
+    check_ajax_referer('novel_reader_action', 'nonce');
+    
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'ابتدا وارد شوید']);
+    }
+    
+    $chapter_id = absint($_POST['chapter_id'] ?? 0);
+    $user_id    = get_current_user_id();
+    
+    if (!$chapter_id) {
+        wp_send_json_error(['message' => 'قسمت نامعتبر']);
+    }
+    
+    $is_vip    = get_post_meta($chapter_id, 'chapter_is_vip', true);
+    $price     = (int) get_post_meta($chapter_id, 'chapter_coin_price', true) ?: 5;
+    $user_coins = (int) get_user_meta($user_id, 'novel_coins', true);
+    
+    if (!$is_vip) {
+        wp_send_json_error(['message' => 'این قسمت رایگان است']);
+    }
+    
+    if ($user_coins < $price) {
+        wp_send_json_error(['message' => 'موجودی سکه کافی نیست']);
+    }
+    
+    global $wpdb;
+    $purchase_table = $wpdb->prefix . 'chapter_purchases';
+    
+    // Create table if not exists
+    $wpdb->query("CREATE TABLE IF NOT EXISTS {$purchase_table} (
+        id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        user_id BIGINT UNSIGNED NOT NULL,
+        chapter_id BIGINT UNSIGNED NOT NULL,
+        novel_id BIGINT UNSIGNED NOT NULL,
+        coins_spent INT UNSIGNED NOT NULL,
+        purchased_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE KEY user_chapter (user_id, chapter_id)
+    ) {$wpdb->get_charset_collate()}");
+    
+    // Check if already purchased
+    $already = $wpdb->get_var($wpdb->prepare(
+        "SELECT COUNT(*) FROM {$purchase_table} WHERE user_id = %d AND chapter_id = %d",
+        $user_id, $chapter_id
+    ));
+    
+    if ($already) {
+        wp_send_json_error(['message' => 'قبلاً خریداری شده']);
+    }
+    
+    $novel_id = get_post_meta($chapter_id, 'chapter_novel_id', true);
+    
+    // Deduct coins
+    $new_balance = $user_coins - $price;
+    update_user_meta($user_id, 'novel_coins', $new_balance);
+    
+    // Record purchase
+    $wpdb->insert($purchase_table, [
+        'user_id'      => $user_id,
+        'chapter_id'   => $chapter_id,
+        'novel_id'     => $novel_id,
+        'coins_spent'  => $price,
+        'purchased_at' => current_time('mysql'),
+    ]);
+    
+    // Record transaction
+    $tx_table = $wpdb->prefix . 'coin_transactions';
+    $wpdb->query("CREATE TABLE IF NOT EXISTS {$tx_table} (
+        id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        user_id BIGINT UNSIGNED NOT NULL,
+        amount INT NOT NULL,
+        type VARCHAR(20) NOT NULL,
+        description VARCHAR(255),
+        balance_after INT NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        INDEX idx_user (user_id)
+    ) {$wpdb->get_charset_collate()}");
+    
+    $wpdb->insert($tx_table, [
+        'user_id'       => $user_id,
+        'amount'        => -$price,
+        'type'          => 'purchase',
+        'description'   => 'خرید قسمت ' . get_post_meta($chapter_id, 'chapter_number', true) . ' - ' . get_the_title($novel_id),
+        'balance_after' => $new_balance,
+        'created_at'    => current_time('mysql'),
+    ]);
+    
+    wp_send_json_success([
+        'message'     => 'خرید موفق',
+        'new_balance' => $new_balance,
+    ]);
+}
+add_action('wp_ajax_novel_purchase_chapter', 'novel_ajax_purchase_chapter');
+
+// ═══════════════════════════════════════════
+// AJAX: Load More Chapters
+// ═══════════════════════════════════════════
+
+function novel_ajax_load_more_chapters() {
+    $novel_id = absint($_POST['novel_id'] ?? 0);
+    $page     = absint($_POST['page'] ?? 2);
+    
+    if (!$novel_id) {
+        wp_send_json_error();
+    }
+    
+    $chapters = novel_get_chapters($novel_id, [
+        'posts_per_page' => 50,
+        'paged'          => $page,
+    ]);
+    
+    ob_start();
+    if ($chapters->have_posts()) {
+        while ($chapters->have_posts()) {
+            $chapters->the_post();
+            $GLOBALS['chapter_item_id'] = get_the_ID();
+            get_template_part('templates/novel/chapter-list-item');
+        }
+        wp_reset_postdata();
+    }
+    $html = ob_get_clean();
+    
+    wp_send_json_success(['html' => $html]);
+}
+add_action('wp_ajax_novel_load_more_chapters', 'novel_ajax_load_more_chapters');
+add_action('wp_ajax_nopriv_novel_load_more_chapters', 'novel_ajax_load_more_chapters');
+
+// ═══════════════════════════════════════════
+// ENQUEUE: Archive Novel CSS
+// ═══════════════════════════════════════════
+
+function novel_phase3_enqueue_archive_styles() {
+    if (is_post_type_archive('novel') || is_tax('genre') || is_tax('novel_tag') || is_tax('novel_status')) {
+        wp_enqueue_style(
+            'novel-archive',
+            get_template_directory_uri() . '/assets/css/archive-novel.css',
+            ['novel-main-style'],
+            NOVEL_VERSION
+        );
+    }
+    
+    // Dashboard forms
+    if (is_page_template('page-user-dashboard.php') || is_page('dashboard')) {
+        wp_enqueue_style(
+            'novel-archive',
+            get_template_directory_uri() . '/assets/css/archive-novel.css',
+            ['novel-main-style'],
+            NOVEL_VERSION
+        );
+    }
+}
+add_action('wp_enqueue_scripts', 'novel_phase3_enqueue_archive_styles');
+
+// ═══════════════════════════════════════════
+// READING HISTORY TABLE (Create on theme setup)
+// ═══════════════════════════════════════════
+
+function novel_create_phase3_tables() {
+    global $wpdb;
+    $charset = $wpdb->get_charset_collate();
+    
+    require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+    
+    // Reading History
+    $sql = "CREATE TABLE IF NOT EXISTS {$wpdb->prefix}reading_history (
+        id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        user_id BIGINT UNSIGNED NOT NULL,
+        novel_id BIGINT UNSIGNED NOT NULL,
+        chapter_id BIGINT UNSIGNED NOT NULL,
+        scroll_position INT UNSIGNED DEFAULT 0,
+        read_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE KEY user_chapter (user_id, chapter_id),
+        INDEX idx_user_novel (user_id, novel_id)
+    ) {$charset}";
+    dbDelta($sql);
+}
+add_action('after_switch_theme', 'novel_create_phase3_tables');
+
+// Also run on init if tables don't exist yet
+function novel_maybe_create_phase3_tables() {
+    global $wpdb;
+    $table = $wpdb->prefix . 'reading_history';
+    if ($wpdb->get_var("SHOW TABLES LIKE '{$table}'") !== $table) {
+        novel_create_phase3_tables();
+    }
+}
+add_action('init', 'novel_maybe_create_phase3_tables', 99);
