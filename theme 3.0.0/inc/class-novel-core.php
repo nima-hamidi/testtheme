@@ -76,11 +76,17 @@ class Novel_Core {
 
         // ۱. ساخت جداول
         $this->create_tables();
-        
+
         /*فاز 8*/
         // Search log table
         if (class_exists('Novel_Search')) {
             Novel_Search::create_table();
+        }
+
+        /*فاز 9*/
+        // Library & History tables
+        if (class_exists('Novel_Bookmarks')) {
+            Novel_Bookmarks::create_tables();
         }
 
         // ۲. ساخت صفحات پیش‌فرض

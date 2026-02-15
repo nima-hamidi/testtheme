@@ -78,6 +78,10 @@ Novel_Reports::get_instance();
 // === Search System ===
 require_once get_template_directory() . '/inc/class-novel-search.php';
 Novel_Search::get_instance();
+/*فاز 9*/
+// === Bookmarks & Library System ===
+require_once get_template_directory() . '/inc/class-novel-bookmarks.php';
+Novel_Bookmarks::get_instance();
 // ═══════════════════════════════════════
 // لود شرطی ماژول‌ها بر اساس تنظیمات
 // ═══════════════════════════════════════
@@ -235,6 +239,15 @@ function novel_enqueue_assets() {
     if (is_singular('novel') || is_singular('chapter')) {
         wp_enqueue_style('novel-comments', NOVEL_ASSETS . 'css/comments.css', ['novel-main'], NOVEL_VERSION);
     }
+
+    /*فاز 9*/
+    // اضافه به بخش enqueue styles
+        wp_enqueue_style(
+            'novel-bookmark',
+            get_template_directory_uri() . '/assets/css/bookmark.css',
+            ['novel-main-style'],
+            FLAVOR_VERSION
+        );
 
     // ── JS اصلی ──
     wp_enqueue_script(
