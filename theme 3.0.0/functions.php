@@ -64,7 +64,8 @@ require_once NOVEL_INC . 'meta-boxes.php';
 require_once NOVEL_INC . 'breadcrumbs.php';
 /*فاز 3*/
 require_once NOVEL_INC . 'class-novel-volumes.php';
-
+/*فاز4 ریتینگ*/
+require_once get_template_directory() . '/inc/class-novel-ratings.php';
 
 
 // ═══════════════════════════════════════
@@ -106,6 +107,12 @@ function novel_init_volumes() {
 }
 add_action('init', 'novel_init_volumes', 15);
 
+/*فاز 4*/
+// === Initialize ===
+function novel_init_ratings() {
+    new Novel_Ratings();
+}
+add_action('init', 'novel_init_ratings', 15);
 
 // ═══════════════════════════════════════
 // لود فایل‌های ادمین
@@ -974,80 +981,17 @@ add_action('after_switch_theme', 'suspended_starter_activation');
 // AJAX: Chapter Vote (Like/Dislike)
 // ═══════════════════════════════════════════
 
-function novel_ajax_chapter_vote() {
-    check_ajax_referer('novel_reader_action', 'nonce');
-    
-    if (!is_user_logged_in()) {
-        wp_send_json_error(['message' => 'ابتدا وارد شوید']);
-    }
-    
-    $chapter_id = absint($_POST['chapter_id'] ?? 0);
-    $vote_type  = sanitize_text_field($_POST['vote_type'] ?? '');
-    $user_id    = get_current_user_id();
-    
-    if (!$chapter_id || !in_array($vote_type, ['like', 'dislike'])) {
-        wp_send_json_error(['message' => 'داده نامعتبر']);
-    }
-    
-    global $wpdb;
-    $table = $wpdb->prefix . 'chapter_votes';
-    
-    // Create table if not exists
-    $wpdb->query("CREATE TABLE IF NOT EXISTS {$table} (
-        id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-        user_id BIGINT UNSIGNED NOT NULL,
-        chapter_id BIGINT UNSIGNED NOT NULL,
-        vote_type VARCHAR(10) NOT NULL,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        UNIQUE KEY user_chapter (user_id, chapter_id)
-    ) {$wpdb->get_charset_collate()}");
-    
-    // Check existing vote
-    $existing = $wpdb->get_var($wpdb->prepare(
-        "SELECT vote_type FROM {$table} WHERE user_id = %d AND chapter_id = %d",
-        $user_id, $chapter_id
-    ));
-    
-    $new_vote = '';
-    
-    if ($existing === $vote_type) {
-        // Remove vote (toggle off)
-        $wpdb->delete($table, ['user_id' => $user_id, 'chapter_id' => $chapter_id]);
-        $new_vote = '';
-    } elseif ($existing) {
-        // Change vote
-        $wpdb->update($table, ['vote_type' => $vote_type], ['user_id' => $user_id, 'chapter_id' => $chapter_id]);
-        $new_vote = $vote_type;
-    } else {
-        // New vote
-        $wpdb->insert($table, [
-            'user_id'    => $user_id,
-            'chapter_id' => $chapter_id,
-            'vote_type'  => $vote_type,
-        ]);
-        $new_vote = $vote_type;
-    }
-    
-    // Recount
-    $likes    = (int) $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$table} WHERE chapter_id = %d AND vote_type = 'like'", $chapter_id));
-    $dislikes = (int) $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$table} WHERE chapter_id = %d AND vote_type = 'dislike'", $chapter_id));
-    
-    update_post_meta($chapter_id, 'chapter_likes', $likes);
-    update_post_meta($chapter_id, 'chapter_dislikes', $dislikes);
-    
-    $total = $likes + $dislikes;
-    $satisfaction = $total > 0 ? round(($likes / $total) * 100) : 0;
-    $sat_class = $satisfaction >= 80 ? 'good' : ($satisfaction >= 50 ? 'mid' : 'bad');
-    
-    wp_send_json_success([
-        'likes'        => number_format_i18n($likes),
-        'dislikes'     => number_format_i18n($dislikes),
-        'user_vote'    => $new_vote,
-        'satisfaction' => $satisfaction,
-        'sat_class'    => $sat_class,
-    ]);
-}
-add_action('wp_ajax_novel_chapter_vote', 'novel_ajax_chapter_vote');
+/*این  قسمت حذف شد*/
+/**
+ * ═══ Replace old vote handlers ═══
+ * 
+ * اگر در functions.php فاز ۳ از novel_ajax_chapter_vote استفاده شده،
+ * آن را حذف کنید. حالا Novel_Ratings آن را مدیریت می‌کند.
+ * 
+ * حذف شوند:
+ *   - function novel_ajax_chapter_vote() و add_action مربوطه
+ *   (جایگزین شده با Novel_Ratings::ajax_vote_chapter)
+ */
 
 // ═══════════════════════════════════════════
 // AJAX: Report Chapter
@@ -1454,3 +1398,31 @@ function novel_maybe_create_phase3_tables() {
     }
 }
 add_action('init', 'novel_maybe_create_phase3_tables', 99);
+
+
+
+
+
+
+
+
+
+
+// === Helper: رندر ستاره‌ها در هرجای قالب ===
+// استفاده: echo novel_render_stars($novel_id, 'lg');
+function novel_render_stars($novel_id, $size = 'md') {
+    $avg   = get_post_meta($novel_id, 'novel_avg_rating', true) ?: 0;
+    $count = get_post_meta($novel_id, 'novel_rating_count', true) ?: 0;
+    return Novel_Ratings::render_stars($avg, $count, $size, $novel_id);
+}
+
+// === Helper: رندر لایک/دیسلایک قسمت ===
+// استفاده: echo novel_render_chapter_votes($chapter_id, 'bottom');
+function novel_render_chapter_votes($chapter_id, $position = 'top') {
+    return Novel_Ratings::render_chapter_votes($chapter_id, $position);
+}
+
+// === Helper: مینی لایک برای لیست قسمت‌ها ===
+function novel_render_mini_likes($chapter_id) {
+    return Novel_Ratings::render_mini_likes($chapter_id);
+}
