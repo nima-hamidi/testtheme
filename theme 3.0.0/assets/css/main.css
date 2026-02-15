@@ -1542,3 +1542,312 @@ textarea.novel-input {
         padding: var(--spacing-xs) 4px;
     }
 }
+
+
+
+
+
+
+
+
+/*فاز 8*/
+/* ═══════════════════════════════════════
+   Header Search Integration
+   (اضافه به main.css)
+   ═══════════════════════════════════════ */
+
+.header-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1.25rem;
+    height: 64px;
+}
+
+.header-logo {
+    flex-shrink: 0;
+}
+
+.header-nav {
+    flex: 0 0 auto;
+}
+
+.header-search-wrap {
+    flex: 1;
+    max-width: 420px;
+    margin: 0 auto;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+/* Auth buttons */
+.btn-header-login {
+    padding: 0.4rem 0.9rem;
+    border: 1.5px solid var(--color-primary, #8b5cf6);
+    border-radius: 10px;
+    color: var(--color-primary, #8b5cf6);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.btn-header-login:hover {
+    background: var(--color-primary, #8b5cf6);
+    color: #fff;
+}
+
+.btn-header-register {
+    padding: 0.4rem 0.9rem;
+    border-radius: 10px;
+    background: var(--color-primary, #8b5cf6);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.btn-header-register:hover {
+    background: var(--color-primary-dark, #7c3aed);
+}
+
+/* User dropdown */
+.header-user-menu {
+    position: relative;
+}
+
+.user-avatar-btn {
+    display: flex;
+    align-items: center;
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 2px;
+    border-radius: 50%;
+    transition: box-shadow 0.2s;
+}
+
+.user-avatar-btn:hover {
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+}
+
+.user-avatar-btn img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: 260px;
+    background: var(--color-surface, #fff);
+    border: 1px solid var(--color-border, rgba(0, 0, 0, 0.08));
+    border-radius: 14px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+    z-index: 1000;
+    overflow: hidden;
+    animation: dropdownFadeIn 0.2s ease;
+}
+
+@keyframes dropdownFadeIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.user-dropdown__header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-bottom: 1px solid var(--color-border, rgba(0, 0, 0, 0.06));
+}
+
+.user-dropdown__header img {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-dropdown__header strong {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--color-text, #1a1a2e);
+}
+
+.user-dropdown__header small {
+    font-size: 0.75rem;
+    color: var(--color-text-muted, #888);
+}
+
+.user-dropdown__links {
+    padding: 0.5rem;
+}
+
+.user-dropdown__links a {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.55rem 0.75rem;
+    border-radius: 8px;
+    color: var(--color-text, #555);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: background 0.15s;
+}
+
+.user-dropdown__links a:hover {
+    background: var(--color-bg, #f5f5f5);
+}
+
+.user-dropdown__links a svg {
+    color: var(--color-text-muted, #999);
+    flex-shrink: 0;
+}
+
+.user-dropdown__divider {
+    height: 1px;
+    background: var(--color-border, rgba(0, 0, 0, 0.06));
+    margin: 0.25rem 0.75rem;
+}
+
+.user-dropdown__logout {
+    color: var(--color-danger, #ef4444) !important;
+}
+
+.user-dropdown__logout svg {
+    color: var(--color-danger, #ef4444) !important;
+}
+
+/* Advanced Search Page Title */
+.adv-search-page-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--color-text, #1a1a2e);
+    margin: 0 0 1rem;
+    font-family: var(--font-heading, 'Vazirmatn', sans-serif);
+}
+
+/* Search toolbar (mobile sort + filter) */
+.adv-search-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+/* Filter actions inside sidebar */
+.adv-filter-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 0.75rem;
+}
+
+/* Initial loading */
+.adv-initial-loading {
+    text-align: center;
+    padding: 4rem 1rem;
+}
+
+.adv-initial-loading p {
+    color: var(--color-text-muted, #888);
+    margin-top: 1rem;
+}
+
+.spinner-dots-lg {
+    display: inline-flex;
+    gap: 6px;
+}
+
+.spinner-dots-lg span {
+    width: 10px;
+    height: 10px;
+    background: var(--color-primary, #8b5cf6);
+    border-radius: 50%;
+    animation: reportDotBounce 1.2s infinite ease-in-out;
+}
+
+.spinner-dots-lg span:nth-child(2) { animation-delay: 0.2s; }
+.spinner-dots-lg span:nth-child(3) { animation-delay: 0.4s; }
+
+/* Genre chip count */
+.genre-chip__count {
+    font-size: 0.7rem;
+    opacity: 0.6;
+    margin-right: 2px;
+}
+
+/* Dark mode additions */
+[data-theme="dark"] .user-dropdown {
+    background: rgba(30, 30, 50, 0.98);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .user-dropdown__header {
+    border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="dark"] .user-dropdown__header strong {
+    color: var(--dark-text, #e2e8f0);
+}
+
+[data-theme="dark"] .user-dropdown__links a {
+    color: var(--dark-text-muted, #94a3b8);
+}
+
+[data-theme="dark"] .user-dropdown__links a:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .user-dropdown__divider {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="dark"] .btn-header-login {
+    border-color: var(--color-primary-light, #a78bfa);
+    color: var(--color-primary-light, #a78bfa);
+}
+
+[data-theme="dark"] .adv-search-page-title {
+    color: var(--dark-text, #e2e8f0);
+}
+
+/* Responsive header adjustments */
+@media (max-width: 768px) {
+    .header-nav {
+        display: none;
+    }
+
+    .header-search-wrap {
+        max-width: none;
+        flex: 0;
+    }
+
+    .header-auth-buttons {
+        display: none;
+    }
+
+    .btn-header-login,
+    .btn-header-register {
+        font-size: 0.8rem;
+        padding: 0.35rem 0.7rem;
+    }
+
+    .adv-search-page-title {
+        font-size: 1.15rem;
+    }
+}

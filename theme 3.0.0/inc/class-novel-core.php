@@ -76,6 +76,12 @@ class Novel_Core {
 
         // ۱. ساخت جداول
         $this->create_tables();
+        
+        /*فاز 8*/
+        // Search log table
+        if (class_exists('Novel_Search')) {
+            Novel_Search::create_table();
+        }
 
         // ۲. ساخت صفحات پیش‌فرض
         $this->create_default_pages();
@@ -458,6 +464,10 @@ class Novel_Core {
             INDEX idx_dates (start_date, end_date),
             INDEX idx_position (position, status)
         ) {$charset_collate};";
+
+        /*فاز8*/
+
+
 
         // اجرای تمام جداول
         foreach ($tables as $sql) {

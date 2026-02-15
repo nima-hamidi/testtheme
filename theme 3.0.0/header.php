@@ -107,15 +107,61 @@ if ($announcement_active && !empty($announcement)) :
         <div class="novel-header-actions">
 
             <!-- جستجو -->
-            <div class="novel-header-search">
-                <input type="search" class="novel-search-input" placeholder="جستجوی رمان..." aria-label="جستجو">
-                <button class="novel-search-btn novel-header-btn" aria-label="جستجو">
-                    <svg class="novel-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                /*فاز 8*/
+            /**
+             * Header - Search Section Addition
+             * 
+             * این بخش را داخل header.php در جای مناسب (معمولاً داخل nav) اضافه کنید
+             * بعد از لوگو و قبل از دکمه‌های سمت چپ
+             *
+             * @package suspended-flavor
+             * @since 3.0.0
+             */
+            
+
+            <!-- ═══ Header Search ═══ -->
+            <div class="header-search-wrap">
+                
+                <!-- Desktop: Full search field -->
+                <div class="header-search-field">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="headerSearchInput" 
+                        placeholder="<?php esc_attr_e('جستجوی رمان، نویسنده، تگ...', 'flavor'); ?>"
+                        autocomplete="off"
+                        role="combobox"
+                        aria-expanded="false"
+                        aria-controls="headerSearchDropdown"
+                        aria-autocomplete="list">
+                </div>
+                
+                <!-- Mobile: Search toggle button -->
+                <button class="header-search-toggle" aria-label="<?php esc_attr_e('جستجو', 'flavor'); ?>">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="11" cy="11" r="8"></circle>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                     </svg>
                 </button>
+                
+                <!-- Mobile cancel button (shown in fullscreen mode) -->
+                <button class="search-mobile-cancel"><?php esc_html_e('لغو', 'flavor'); ?></button>
+                
+                <!-- Search dropdown results -->
+                <div id="headerSearchDropdown" role="listbox" aria-label="<?php esc_attr_e('نتایج جستجو', 'flavor'); ?>">
+                    <!-- Filled by JS -->
+                </div>
+                
             </div>
+
+            <!-- Search overlay (mobile) -->
+            <div id="headerSearchOverlay"></div>
+
+
+
 
             <!-- دارک‌مود -->
             <button class="novel-theme-toggle novel-header-btn" aria-label="تغییر حالت تاریک/روشن">

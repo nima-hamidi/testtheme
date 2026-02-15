@@ -74,7 +74,10 @@ require_once get_template_directory() . '/inc/class-novel-notifications.php';
 /*فاز 7*/
 require_once get_template_directory() . '/inc/class-novel-reports.php';
 Novel_Reports::get_instance();
-
+/*فاز 8*/
+// === Search System ===
+require_once get_template_directory() . '/inc/class-novel-search.php';
+Novel_Search::get_instance();
 // ═══════════════════════════════════════
 // لود شرطی ماژول‌ها بر اساس تنظیمات
 // ═══════════════════════════════════════
@@ -160,6 +163,7 @@ if (is_admin()) {
             require_once $admin_path;
         }
     }
+    /*فاز 7*/
     if (class_exists('Novel_Admin_Reports')) {
     Novel_Admin_Reports::get_instance();
     }

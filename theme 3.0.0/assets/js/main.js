@@ -791,3 +791,129 @@
     window.NovelTheme = ThemeManager;
 
 })();
+
+
+
+
+
+
+
+
+
+/*فاز 8*/
+/* ═══════════════════════════════════════
+   User Dropdown Menu
+   (اضافه به main.js)
+   ═══════════════════════════════════════ */
+
+(function($) {
+    'use strict';
+
+    const UserMenu = {
+        init() {
+            this.toggle = document.getElementById('userMenuToggle');
+            this.dropdown = document.getElementById('userDropdown');
+            
+            if (!this.toggle || !this.dropdown) return;
+            
+            this.bindEvents();
+        },
+        
+        bindEvents() {
+            const self = this;
+            
+            // Toggle dropdown
+            $(this.toggle).on('click', function(e) {
+                e.stopPropagation();
+                self.toggleDropdown();
+            });
+            
+            // Close on outside click
+            $(document).on('click', function(e) {
+                if (!$(e.target).closest('.header-user-menu').length) {
+                    self.closeDropdown();
+                }
+            });
+            
+            // Close on Escape
+            $(document).on('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    self.closeDropdown();
+                }
+            });
+        },
+        
+        toggleDropdown() {
+            const isVisible = this.dropdown.style.display !== 'none';
+            this.dropdown.style.display = isVisible ? 'none' : 'block';
+        },
+        
+        closeDropdown() {
+            if (this.dropdown) {
+                this.dropdown.style.display = 'none';
+            }
+        }
+    };
+    
+    /* ═══════════════════════════════════════
+       Mobile Navigation
+       ═══════════════════════════════════════ */
+    
+    const MobileNav = {
+        init() {
+            this.toggle = document.getElementById('mobileMenuToggle');
+            this.overlay = document.getElementById('mobileNavOverlay');
+            this.close = document.getElementById('mobileNavClose');
+            
+            if (!this.toggle || !this.overlay) return;
+            
+            this.bindEvents();
+        },
+        
+        bindEvents() {
+            const self = this;
+            
+            $(this.toggle).on('click', function() {
+                self.open();
+            });
+            
+            if (this.close) {
+                $(this.close).on('click', function() {
+                    self.closeNav();
+                });
+            }
+            
+            // Close on overlay click
+            $(this.overlay).on('click', function(e) {
+                if (e.target === self.overlay) {
+                    self.closeNav();
+                }
+            });
+            
+            // Escape
+            $(document).on('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    self.closeNav();
+                }
+            });
+        },
+        
+        open() {
+            $(this.overlay).fadeIn(250);
+            document.body.style.overflow = 'hidden';
+            $(this.overlay).find('.mobile-nav-content').addClass('is-open');
+        },
+        
+        closeNav() {
+            $(this.overlay).find('.mobile-nav-content').removeClass('is-open');
+            $(this.overlay).fadeOut(250);
+            document.body.style.overflow = '';
+        }
+    };
+    
+    $(document).ready(function() {
+        UserMenu.init();
+        MobileNav.init();
+    });
+    
+})(jQuery);
