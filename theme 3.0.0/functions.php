@@ -499,3 +499,383 @@ function novel_clear_cache($group, $id = '') {
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * functions.php - Updated for Phase 1
+ * 
+ * Add 'auth' module to the modules array in the existing functions.php
+ * 
+ * @package suspended-starter
+ * @since 3.0.0
+ */
+
+// ... (existing code from Phase 0 remains unchanged) ...
+
+/**
+ * Load theme modules
+ * UPDATE: Add 'auth' to the modules list
+ */
+function suspended_starter_load_modules() {
+    $modules = [
+        'core'     => '/inc/class-novel-core.php',
+        'settings' => '/inc/class-novel-settings.php',
+        'auth'     => '/inc/class-novel-auth.php',      // ← NEW: Phase 1
+    ];
+
+    $module_classes = [
+        'core'     => 'Novel_Core',
+        'settings' => 'Novel_Settings',
+        'auth'     => 'Novel_Auth',                     // ← NEW: Phase 1
+    ];
+
+    foreach ($modules as $slug => $file) {
+        $filepath = get_template_directory() . $file;
+        if (file_exists($filepath)) {
+            require_once $filepath;
+            
+            // Initialize class if exists
+            if (isset($module_classes[$slug]) && class_exists($module_classes[$slug])) {
+                $class = $module_classes[$slug];
+                if (method_exists($class, 'get_instance')) {
+                    $class::get_instance();
+                } else {
+                    new $class();
+                }
+            }
+        }
+    }
+}
+add_action('after_setup_theme', 'suspended_starter_load_modules', 5);
+
+/**
+ * Flush rewrite rules on theme activation (for auth URLs)
+ */
+function suspended_starter_activation() {
+    // Ensure auth rewrite rules are registered
+    if (class_exists('Novel_Auth')) {
+        $auth = Novel_Auth::get_instance();
+        $auth->add_rewrite_rules();
+    }
+    flush_rewrite_rules();
+}
+add_action('after_switch_theme', 'suspended_starter_activation');
+
+/**
+ * Auth-specific: Add email verification banner in dashboard
+ * (Hooked to wp_footer to show verification notice)
+ */
+function novel_email_verification_notice() {
+    if (!is_user_logged_in()) return;
+    if (!class_exists('Novel_Auth')) return;
+    
+    $user_id = get_current_user_id();
+    if (Novel_Auth::is_email_verified($user_id)) return;
+    
+    // Don't show on auth pages
+    $auth_page = get_query_var('novel_auth_page');
+    if (!empty($auth_page)) return;
+    
+    ?>
+    <div class="novel-verify-banner" id="novelVerifyBanner">
+        <div class="novel-verify-banner__inner">
+            <span class="novel-verify-banner__icon">⚠️</span>
+            <span class="novel-verify-banner__text">
+                ایمیل شما تأیید نشده! برخی امکانات محدود است.
+                <a href="<?php echo esc_url(home_url('/verify-email/')); ?>" class="novel-verify-banner__link">ارسال مجدد لینک تأیید</a>
+            </span>
+            <button type="button" class="novel-verify-banner__close" onclick="this.closest('.novel-verify-banner').style.display='none'" aria-label="بستن">×</button>
+        </div>
+    </div>
+    <style>
+        .novel-verify-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10000;
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border-bottom: 2px solid #f59e0b;
+            padding: 10px 20px;
+            font-size: 14px;
+            color: #92400e;
+            text-align: center;
+        }
+        .novel-verify-banner__inner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .novel-verify-banner__link {
+            color: #d97706;
+            font-weight: 700;
+            text-decoration: underline;
+            margin-right: 4px;
+        }
+        .novel-verify-banner__close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #92400e;
+            padding: 0 4px;
+            line-height: 1;
+            margin-right: auto;
+        }
+        [data-theme="dark"] .novel-verify-banner {
+            background: linear-gradient(135deg, #451a03, #78350f);
+            border-color: #b45309;
+            color: #fde68a;
+        }
+        [data-theme="dark"] .novel-verify-banner__link { color: #fbbf24; }
+        [data-theme="dark"] .novel-verify-banner__close { color: #fde68a; }
+        body.has-verify-banner { padding-top: 48px; }
+    </style>
+    <script>document.body.classList.add('has-verify-banner');</script>
+    <?php
+}
+add_action('wp_footer', 'novel_email_verification_notice', 5);
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * functions.php - Updated for Phase 1 Part 2
+ * 
+ * ADD these modules to the existing modules array:
+ */
+
+function suspended_starter_load_modules() {
+    $modules = [
+        'core'     => '/inc/class-novel-core.php',
+        'settings' => '/inc/class-novel-settings.php',
+        'auth'     => '/inc/class-novel-auth.php',
+        'avatars'  => '/inc/class-novel-avatars.php',     // ← NEW
+        'profile'  => '/inc/class-novel-profile.php',     // ← NEW
+    ];
+
+    $module_classes = [
+        'core'     => 'Novel_Core',
+        'settings' => 'Novel_Settings',
+        'auth'     => 'Novel_Auth',
+        'avatars'  => 'Novel_Avatars',                   // ← NEW
+        'profile'  => 'Novel_Profile',                   // ← NEW
+    ];
+
+    foreach ($modules as $slug => $file) {
+        $filepath = get_template_directory() . $file;
+        if (file_exists($filepath)) {
+            require_once $filepath;
+            if (isset($module_classes[$slug]) && class_exists($module_classes[$slug])) {
+                $class = $module_classes[$slug];
+                if (method_exists($class, 'get_instance')) {
+                    $class::get_instance();
+                } else {
+                    new $class();
+                }
+            }
+        }
+    }
+}
+add_action('after_setup_theme', 'suspended_starter_load_modules', 5);
+
+/**
+ * Global helper: Get avatar URL
+ */
+function novel_get_avatar($user_id, $size = 64) {
+    if (class_exists('Novel_Avatars')) {
+        return Novel_Avatars::get_avatar_url_static($user_id, $size);
+    }
+    return get_avatar_url($user_id, ['size' => $size]);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * functions.php - Add comments module
+ * Add to the existing modules array:
+ */
+
+function suspended_starter_load_modules() {
+    $modules = [
+        'core'     => '/inc/class-novel-core.php',
+        'settings' => '/inc/class-novel-settings.php',
+        'auth'     => '/inc/class-novel-auth.php',
+        'avatars'  => '/inc/class-novel-avatars.php',
+        'profile'  => '/inc/class-novel-profile.php',
+        'comments' => '/inc/class-novel-comments.php',   // ← NEW
+    ];
+
+    $module_classes = [
+        'core'     => 'Novel_Core',
+        'settings' => 'Novel_Settings',
+        'auth'     => 'Novel_Auth',
+        'avatars'  => 'Novel_Avatars',
+        'profile'  => 'Novel_Profile',
+        'comments' => 'Novel_Comments',                  // ← NEW
+    ];
+
+    foreach ($modules as $slug => $file) {
+        $filepath = get_template_directory() . $file;
+        if (file_exists($filepath)) {
+            require_once $filepath;
+            if (isset($module_classes[$slug]) && class_exists($module_classes[$slug])) {
+                $class = $module_classes[$slug];
+                if (method_exists($class, 'get_instance')) {
+                    $class::get_instance();
+                } else {
+                    new $class();
+                }
+            }
+        }
+    }
+}
+add_action('after_setup_theme', 'suspended_starter_load_modules', 5);
+
+/**
+ * Global helper: Get comment count by type for a post
+ */
+function novel_get_comment_count($post_id, $type = 'comment') {
+    if (class_exists('Novel_Comments')) {
+        return Novel_Comments::get_instance()->count_comments($post_id, $type);
+    }
+    return wp_count_comments($post_id)->approved;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * functions.php - Complete module list after Phase 2
+ */
+
+function suspended_starter_load_modules() {
+    $modules = [
+        'core'     => '/inc/class-novel-core.php',
+        'settings' => '/inc/class-novel-settings.php',
+        'auth'     => '/inc/class-novel-auth.php',
+        'avatars'  => '/inc/class-novel-avatars.php',
+        'profile'  => '/inc/class-novel-profile.php',
+        'comments' => '/inc/class-novel-comments.php',
+        'stickers' => '/inc/class-novel-stickers.php',    // ← NEW
+    ];
+
+    $module_classes = [
+        'core'     => 'Novel_Core',
+        'settings' => 'Novel_Settings',
+        'auth'     => 'Novel_Auth',
+        'avatars'  => 'Novel_Avatars',
+        'profile'  => 'Novel_Profile',
+        'comments' => 'Novel_Comments',
+        'stickers' => 'Novel_Stickers',                   // ← NEW
+    ];
+
+    foreach ($modules as $slug => $file) {
+        $filepath = get_template_directory() . $file;
+        if (file_exists($filepath)) {
+            require_once $filepath;
+            if (isset($module_classes[$slug]) && class_exists($module_classes[$slug])) {
+                $class = $module_classes[$slug];
+                if (method_exists($class, 'get_instance')) {
+                    $class::get_instance();
+                } else {
+                    new $class();
+                }
+            }
+        }
+    }
+}
+add_action('after_setup_theme', 'suspended_starter_load_modules', 5);
+
+/**
+ * Global helpers
+ */
+
+// Avatar
+function novel_get_avatar($user_id, $size = 64) {
+    if (class_exists('Novel_Avatars')) {
+        return Novel_Avatars::get_avatar_url_static($user_id, $size);
+    }
+    return get_avatar_url($user_id, ['size' => $size]);
+}
+
+// Comment count by type
+function novel_get_comment_count($post_id, $type = 'comment') {
+    if (class_exists('Novel_Comments')) {
+        return Novel_Comments::get_instance()->count_comments($post_id, $type);
+    }
+    return wp_count_comments($post_id)->approved;
+}
+
+// User comment level
+function novel_get_user_level($user_id) {
+    if (class_exists('Novel_Comments')) {
+        return Novel_Comments::get_user_level($user_id);
+    }
+    return ['title' => 'ناشناس', 'icon' => '👤', 'color' => '#6b7280', 'count' => 0];
+}
+
+// User badges
+function novel_get_user_badges($user_id, $post_id = 0) {
+    if (class_exists('Novel_Comments')) {
+        return Novel_Comments::get_user_badges($user_id, $post_id);
+    }
+    return [];
+}
+
+/**
+ * Flush rewrite rules on activation
+ */
+function suspended_starter_activation() {
+    if (class_exists('Novel_Auth')) {
+        Novel_Auth::get_instance()->add_rewrite_rules();
+    }
+    if (class_exists('Novel_Comments')) {
+        Novel_Comments::get_instance()->add_rewrite_rules();
+    }
+    flush_rewrite_rules();
+}
+add_action('after_switch_theme', 'suspended_starter_activation');
