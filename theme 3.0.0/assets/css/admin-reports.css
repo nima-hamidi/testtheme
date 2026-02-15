@@ -1,0 +1,184 @@
+/**
+ * Admin Reports Styles
+ *
+ * @package suspended-flavor
+ * @since 3.0.0
+ */
+
+/* Stats Cards */
+.novel-reports-stats {
+    display: flex;
+    gap: 12px;
+    margin: 16px 0;
+    flex-wrap: wrap;
+}
+
+.stat-card {
+    flex: 1;
+    min-width: 120px;
+    padding: 16px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    text-align: center;
+    border-top: 3px solid #ddd;
+}
+
+.stat-card.stat-total { border-top-color: #6366f1; }
+.stat-card.stat-pending { border-top-color: #f59e0b; }
+.stat-card.stat-reviewed { border-top-color: #3b82f6; }
+.stat-card.stat-resolved { border-top-color: #10b981; }
+.stat-card.stat-rejected { border-top-color: #ef4444; }
+
+.stat-number {
+    display: block;
+    font-size: 1.8em;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.stat-total .stat-number { color: #6366f1; }
+.stat-pending .stat-number { color: #f59e0b; }
+.stat-reviewed .stat-number { color: #3b82f6; }
+.stat-resolved .stat-number { color: #10b981; }
+.stat-rejected .stat-number { color: #ef4444; }
+
+.stat-label {
+    display: block;
+    font-size: 0.85em;
+    color: #666;
+    margin-top: 4px;
+}
+
+/* Report Badges */
+.report-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.report-badge--chapter { background: #3b82f6; }
+.report-badge--comment { background: #10b981; }
+.report-badge--user { background: #ef4444; }
+.report-badge--novel { background: #8b5cf6; }
+
+/* Status Badges */
+.report-status {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.report-status--pending { background: #fef3cd; color: #856404; }
+.report-status--reviewed { background: #cce5ff; color: #004085; }
+.report-status--resolved { background: #d4edda; color: #155724; }
+.report-status--rejected { background: #f8d7da; color: #721c24; }
+
+/* Type badge in detail */
+.report-type-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 6px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.report-status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 6px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+/* Detail Page Grid */
+.report-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.report-detail-card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.report-detail-card h3 {
+    margin: 0 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.report-actions-card {
+    grid-column: 1 / -1;
+}
+
+.report-detail-card .form-table th {
+    width: 100px;
+    padding: 8px 0;
+    font-weight: 600;
+}
+
+.report-detail-card .form-table td {
+    padding: 8px 0;
+}
+
+.report-action-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+.report-action-form .form-field {
+    margin-bottom: 12px;
+}
+
+.report-action-form .form-field label {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 600;
+}
+
+.report-review-info {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #eee;
+    color: #888;
+}
+
+.reported-item-preview {
+    padding: 12px;
+    background: #f9f9f9;
+    border-radius: 6px;
+}
+
+.reported-item-preview p {
+    margin: 4px 0;
+}
+
+/* Reason label */
+.report-reason-label {
+    white-space: nowrap;
+}
+
+/* Responsive */
+@media (max-width: 782px) {
+    .novel-reports-stats {
+        flex-direction: column;
+    }
+    
+    .report-detail-grid {
+        grid-template-columns: 1fr;
+    }
+}

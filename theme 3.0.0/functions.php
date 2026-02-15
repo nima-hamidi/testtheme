@@ -71,6 +71,9 @@ require_once get_template_directory() . '/inc/class-novel-authors.php';
 require_once get_template_directory() . '/inc/class-novel-follow.php';
 /*فاز 6 */
 require_once get_template_directory() . '/inc/class-novel-notifications.php';
+/*فاز 7*/
+require_once get_template_directory() . '/inc/class-novel-reports.php';
+Novel_Reports::get_instance();
 
 // ═══════════════════════════════════════
 // لود شرطی ماژول‌ها بر اساس تنظیمات
@@ -156,6 +159,9 @@ if (is_admin()) {
         if (file_exists($admin_path)) {
             require_once $admin_path;
         }
+    }
+    if (class_exists('Novel_Admin_Reports')) {
+    Novel_Admin_Reports::get_instance();
     }
 }
 
