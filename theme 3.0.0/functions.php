@@ -66,7 +66,11 @@ require_once NOVEL_INC . 'breadcrumbs.php';
 require_once NOVEL_INC . 'class-novel-volumes.php';
 /*فاز4 ریتینگ*/
 require_once get_template_directory() . '/inc/class-novel-ratings.php';
-
+/*فاز 5*/
+require_once get_template_directory() . '/inc/class-novel-authors.php';
+require_once get_template_directory() . '/inc/class-novel-follow.php';
+/*فاز 6 */
+require_once get_template_directory() . '/inc/class-novel-notifications.php';
 
 // ═══════════════════════════════════════
 // لود شرطی ماژول‌ها بر اساس تنظیمات
@@ -113,6 +117,23 @@ function novel_init_ratings() {
     new Novel_Ratings();
 }
 add_action('init', 'novel_init_ratings', 15);
+
+/*فاز 5*/
+function novel_init_authors() {
+    new Novel_Authors();
+}
+add_action('init', 'novel_init_authors', 15);
+
+function novel_init_follow() {
+    new Novel_Follow();
+}
+add_action('init', 'novel_init_follow', 15);
+
+/*فاز 6*/
+function novel_init_notifications() {
+    new Novel_Notifications();
+}
+add_action('init', 'novel_init_notifications', 12);
 
 // ═══════════════════════════════════════
 // لود فایل‌های ادمین
@@ -1060,62 +1081,7 @@ add_action('wp_ajax_novel_report_chapter', 'novel_ajax_report_chapter');
 // AJAX: Toggle Follow Novel
 // ═══════════════════════════════════════════
 
-function novel_ajax_toggle_follow() {
-    check_ajax_referer('novel_follow', 'nonce');
-    
-    if (!is_user_logged_in()) {
-        wp_send_json_error(['message' => 'ابتدا وارد شوید']);
-    }
-    
-    $novel_id = absint($_POST['novel_id'] ?? 0);
-    $user_id  = get_current_user_id();
-    
-    if (!$novel_id) {
-        wp_send_json_error(['message' => 'داده نامعتبر']);
-    }
-    
-    global $wpdb;
-    $table = $wpdb->prefix . 'novel_follows';
-    
-    // Create table if not exists
-    $wpdb->query("CREATE TABLE IF NOT EXISTS {$table} (
-        id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-        user_id BIGINT UNSIGNED NOT NULL,
-        novel_id BIGINT UNSIGNED NOT NULL,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        UNIQUE KEY user_novel (user_id, novel_id)
-    ) {$wpdb->get_charset_collate()}");
-    
-    $exists = $wpdb->get_var($wpdb->prepare(
-        "SELECT id FROM {$table} WHERE user_id = %d AND novel_id = %d",
-        $user_id, $novel_id
-    ));
-    
-    if ($exists) {
-        $wpdb->delete($table, ['id' => $exists]);
-        $following = false;
-    } else {
-        $wpdb->insert($table, [
-            'user_id'    => $user_id,
-            'novel_id'   => $novel_id,
-            'created_at' => current_time('mysql'),
-        ]);
-        $following = true;
-    }
-    
-    // Update count
-    $count = (int) $wpdb->get_var($wpdb->prepare(
-        "SELECT COUNT(*) FROM {$table} WHERE novel_id = %d",
-        $novel_id
-    ));
-    update_post_meta($novel_id, 'novel_follow_count', $count);
-    
-    wp_send_json_success([
-        'following' => $following,
-        'count'     => number_format_i18n($count),
-    ]);
-}
-add_action('wp_ajax_novel_toggle_follow', 'novel_ajax_toggle_follow');
+/* این کد کامل جایگزین شد*/
 
 // ═══════════════════════════════════════════
 // AJAX: Update Library Status
@@ -1433,45 +1399,71 @@ function novel_render_mini_likes($chapter_id) {
 
 
 
-
-
-
-
-
-/**
- * ═══ فاز ۵ - اضافات به functions.php ═══
- */
-
-// === اضافه به بخش require ها ===
-require_once get_template_directory() . '/inc/class-novel-authors.php';
-require_once get_template_directory() . '/inc/class-novel-follow.php';
-
-// === Initialize ===
-function novel_init_authors() {
-    new Novel_Authors();
-}
-add_action('init', 'novel_init_authors', 15);
-
-function novel_init_follow() {
-    new Novel_Follow();
-}
-add_action('init', 'novel_init_follow', 15);
-
-/**
- * Replace old novel_ajax_toggle_follow from Phase 3
- * 
- * حذف شود: function novel_ajax_toggle_follow() و add_action مربوطه
- * جایگزین: Novel_Follow::ajax_follow_novel()
- * 
- * ⚠️ nonce key تغییر کرده:
- *   قدیم: 'novel_follow'
- *   جدید: 'novel_follow_action'
- *   → در single-novel.php هم آپدیت شود
- */
-
-/**
- * User writing toggle check helper
- */
+/* فاز 5*/
 function novel_is_user_writing_enabled() {
     return (bool) get_option('novel_user_writing', true);
 }
+
+ 
+/*فاز 6*/
+// Novel approved/rejected notification
+function novel_notify_novel_status_change($new_status, $old_status, $post) {
+    if ($post->post_type !== 'novel') return;
+
+    if ($old_status === 'pending' && $new_status === 'publish') {
+        Novel_Notifications::send(
+            $post->post_author,
+            'novel_approved',
+            '✅ رمان «' . $post->post_title . '» تأیید و منتشر شد!',
+            '',
+            get_permalink($post->ID)
+        );
+    }
+
+    if ($old_status === 'pending' && $new_status === 'draft') {
+        $reason = get_post_meta($post->ID, '_rejection_reason', true) ?: '';
+        Novel_Notifications::send(
+            $post->post_author,
+            'novel_rejected',
+            '❌ رمان «' . $post->post_title . '» رد شد',
+            $reason,
+            ''
+        );
+    }
+}
+add_action('transition_post_status', 'novel_notify_novel_status_change', 10, 3);
+
+// Comment reply notification
+function novel_notify_comment_reply($comment_id, $comment_approved) {
+    if ($comment_approved !== 1) return;
+
+    $comment = get_comment($comment_id);
+    if (!$comment || !$comment->comment_parent) return;
+
+    $parent = get_comment($comment->comment_parent);
+    if (!$parent || !$parent->user_id) return;
+
+    if ((int)$parent->user_id === (int)$comment->user_id) return;
+
+    $commenter = $comment->comment_author ?: 'کاربر';
+    $post_url  = get_permalink($comment->comment_post_ID) . '#comment-' . $comment_id;
+
+    Novel_Notifications::send(
+        $parent->user_id,
+        'comment_reply',
+        '💬 ' . $commenter . ' به دیدگاه شما پاسخ داد',
+        mb_substr(wp_strip_all_tags($comment->comment_content), 0, 80),
+        $post_url
+    );
+}
+add_action('comment_post', 'novel_notify_comment_reply', 20, 2);
+
+
+
+
+function novel_deactivation_cleanup() {
+    wp_clear_scheduled_hook('novel_process_email_queue');
+    wp_clear_scheduled_hook('novel_cleanup_old_notifications');
+    wp_clear_scheduled_hook('novel_check_coin_expiry');
+}
+add_action('switch_theme', 'novel_deactivation_cleanup');
