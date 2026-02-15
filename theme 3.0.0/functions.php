@@ -86,6 +86,20 @@ Novel_Bookmarks::get_instance();
 // === Rankings & View Counter ===
 require_once get_template_directory() . '/inc/class-novel-rankings.php';
 Novel_Rankings::get_instance();
+/*فاز 11*/
+// === Subscriptions ===
+require_once get_template_directory() . '/inc/class-novel-subscriptions.php';
+Novel_Subscriptions::get_instance();
+
+// === Coins System ===
+require_once get_template_directory() . '/inc/class-novel-coins.php';
+Novel_Coins::get_instance();
+
+// Admin
+if (is_admin()) {
+    require_once get_template_directory() . '/inc/admin/class-novel-admin-coins.php';
+    Novel_Admin_Coins::get_instance();
+}
 // ═══════════════════════════════════════
 // لود شرطی ماژول‌ها بر اساس تنظیمات
 // ═══════════════════════════════════════

@@ -95,6 +95,12 @@ class Novel_Core {
             Novel_Rankings::create_tables();
         }
 
+        /*فاز 11*/
+        // Coins tables
+        if (class_exists('Novel_Coins')) {
+            Novel_Coins::create_tables();
+        }
+        
         // ۲. ساخت صفحات پیش‌فرض
         $this->create_default_pages();
 
