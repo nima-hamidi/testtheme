@@ -82,6 +82,10 @@ Novel_Search::get_instance();
 // === Bookmarks & Library System ===
 require_once get_template_directory() . '/inc/class-novel-bookmarks.php';
 Novel_Bookmarks::get_instance();
+/*فاز 10*/
+// === Rankings & View Counter ===
+require_once get_template_directory() . '/inc/class-novel-rankings.php';
+Novel_Rankings::get_instance();
 // ═══════════════════════════════════════
 // لود شرطی ماژول‌ها بر اساس تنظیمات
 // ═══════════════════════════════════════

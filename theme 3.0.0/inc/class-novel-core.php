@@ -89,6 +89,12 @@ class Novel_Core {
             Novel_Bookmarks::create_tables();
         }
 
+        /*فاز 10*/
+        // Views table
+        if (class_exists('Novel_Rankings')) {
+            Novel_Rankings::create_tables();
+        }
+
         // ۲. ساخت صفحات پیش‌فرض
         $this->create_default_pages();
 
