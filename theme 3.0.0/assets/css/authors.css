@@ -1,0 +1,307 @@
+/**
+ * Authors Page & Profile Styles
+ *
+ * @package suspended-starter
+ * @since 3.0.0
+ */
+
+/* ═══════════════════════════════════════════
+   ONLINE STATUS DOT
+   ═══════════════════════════════════════════ */
+
+.status-dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--bg-primary, #fff);
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+}
+
+.status-online { background: #22c55e; }
+.status-recent { background: #eab308; }
+.status-offline { background: #9ca3af; }
+
+/* ═══════════════════════════════════════════
+   AUTHORS LIST PAGE
+   ═══════════════════════════════════════════ */
+
+.authors-page { max-width: 1100px; margin: 0 auto; padding: 24px 16px; }
+
+.authors-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 20px; }
+
+.authors-filters {
+    display: flex; gap: 16px; flex-wrap: wrap; align-items: center;
+    margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border, #e5e7eb);
+}
+
+.authors-search-wrap { flex: 1; min-width: 200px; }
+
+.authors-search-input {
+    width: 100%; padding: 10px 14px; border: 2px solid var(--border, #e5e7eb);
+    border-radius: 10px; font-size: 14px; transition: border-color 0.2s;
+}
+
+.authors-search-input:focus { border-color: var(--primary, #6366f1); outline: none; }
+
+.authors-sort-wrap { display: flex; align-items: center; gap: 8px; }
+.sort-label { font-size: 13px; font-weight: 600; color: var(--text-muted, #6b7280); }
+
+.authors-sort-select {
+    padding: 8px 12px; border: 1px solid var(--border, #e5e7eb);
+    border-radius: 8px; font-size: 13px; background: var(--bg-primary, #fff);
+}
+
+.authors-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px;
+}
+
+.authors-empty { grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted); }
+
+.btn-load-more-authors {
+    display: block; width: 100%; max-width: 300px; margin: 20px auto 0; padding: 12px;
+    border: 1px dashed var(--border); border-radius: 10px; background: transparent;
+    cursor: pointer; font-size: 14px; font-weight: 600; color: var(--primary, #6366f1);
+}
+
+.btn-load-more-authors:hover { background: #eef2ff; }
+
+/* ═══════════════════════════════════════════
+   AUTHOR CARD
+   ═══════════════════════════════════════════ */
+
+.author-card {
+    display: flex; gap: 16px; padding: 20px; border: 1px solid var(--border, #e5e7eb);
+    border-radius: 14px; background: var(--bg-primary, #fff); transition: all 0.2s;
+}
+
+.author-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); transform: translateY(-2px); }
+
+.author-card__avatar { position: relative; flex-shrink: 0; }
+.author-card__img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; }
+
+.author-card__name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.author-card__name a { color: var(--text-primary); text-decoration: none; }
+.author-card__name a:hover { color: var(--primary, #6366f1); }
+
+.author-mini-badge {
+    display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px;
+    font-weight: 600; background: #eef2ff; color: #6366f1; margin-bottom: 6px;
+}
+
+.author-card__stats {
+    display: flex; flex-wrap: wrap; gap: 8px; font-size: 12px;
+    color: var(--text-muted, #6b7280); margin-bottom: 10px;
+}
+
+.author-card__actions { display: flex; gap: 8px; }
+
+.btn-follow-user {
+    padding: 6px 16px; border: 2px solid #fca5a5; border-radius: 20px;
+    background: transparent; cursor: pointer; font-size: 13px; font-weight: 600;
+    color: #ef4444; transition: all 0.2s;
+}
+
+.btn-follow-user:hover { background: #fef2f2; }
+
+.btn-follow-user.following {
+    background: #ef4444; color: #fff; border-color: #ef4444;
+}
+
+.btn-follow-lg { padding: 10px 24px; font-size: 14px; }
+
+.btn-follow-sm { padding: 4px 12px; font-size: 12px; border-width: 1px; }
+
+.btn-view-profile {
+    padding: 6px 16px; border: 1px solid var(--border); border-radius: 20px;
+    background: transparent; font-size: 13px; color: var(--text-secondary);
+    text-decoration: none; transition: all 0.2s;
+}
+
+.btn-view-profile:hover { background: var(--bg-secondary); border-color: var(--primary); }
+
+/* ═══════════════════════════════════════════
+   TOP AUTHORS (Homepage)
+   ═══════════════════════════════════════════ */
+
+.top-authors-section { padding: 40px 0; }
+
+.top-authors-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+}
+
+.top-author-card {
+    text-align: center; padding: 20px 12px; border: 1px solid var(--border);
+    border-radius: 14px; background: var(--bg-primary); transition: all 0.2s;
+}
+
+.top-author-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); transform: translateY(-2px); }
+
+.top-author-card__avatar { position: relative; display: inline-block; margin-bottom: 8px; }
+.top-author-img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; }
+
+.top-author-card__name { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.top-author-card__name a { color: var(--text-primary); text-decoration: none; }
+
+.top-author-card__stats { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+.top-author-card__followers { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+
+/* ═══════════════════════════════════════════
+   AUTHOR PROFILE PAGE
+   ═══════════════════════════════════════════ */
+
+.author-hero {
+    background: linear-gradient(135deg, var(--profile-color), color-mix(in srgb, var(--profile-color) 60%, #000));
+    padding-bottom: 0;
+}
+
+.author-hero__banner { height: 120px; }
+
+.author-hero .container { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+
+.author-hero__content {
+    display: flex; gap: 24px; padding: 0 0 24px;
+    margin-top: -60px;
+}
+
+.author-hero__avatar {
+    position: relative; flex-shrink: 0;
+}
+
+.author-avatar-img {
+    width: 120px; height: 120px; border-radius: 50%; object-fit: cover;
+    border: 4px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.author-hero__info { flex: 1; padding-top: 64px; }
+
+.author-name { font-size: 1.6rem; font-weight: 900; color: #fff; margin-bottom: 6px; }
+
+.author-badge {
+    display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px;
+    font-weight: 600; vertical-align: middle;
+}
+
+.badge-admin { background: rgba(255,255,255,0.2); color: #fde68a; }
+.badge-author { background: rgba(255,255,255,0.2); color: #bbf7d0; }
+
+.author-bio { color: rgba(255,255,255,0.85); font-size: 14px; margin-bottom: 10px; line-height: 1.7; }
+
+.author-meta-line {
+    display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px;
+    color: rgba(255,255,255,0.7); margin-bottom: 16px;
+}
+
+.author-meta-line a { color: rgba(255,255,255,0.9); text-decoration: none; }
+.author-meta-line a:hover { text-decoration: underline; }
+
+.author-stats-grid {
+    display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px;
+}
+
+.stat-box {
+    background: rgba(255,255,255,0.15); backdrop-filter: blur(8px);
+    padding: 10px 16px; border-radius: 10px; text-align: center;
+    min-width: 80px;
+}
+
+.stat-box.stat-clickable { cursor: pointer; transition: background 0.2s; }
+.stat-box.stat-clickable:hover { background: rgba(255,255,255,0.25); }
+
+.stat-num { display: block; font-size: 18px; font-weight: 800; color: #fff; }
+.stat-lbl { font-size: 11px; color: rgba(255,255,255,0.7); }
+
+.author-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.btn-report-user {
+    padding: 8px 16px; border: 1px solid rgba(255,255,255,0.3); border-radius: 8px;
+    background: transparent; color: rgba(255,255,255,0.7); cursor: pointer;
+    font-size: 13px; transition: all 0.2s;
+}
+
+.btn-report-user:hover { background: rgba(255,255,255,0.1); }
+
+.author-announcement {
+    display: flex; align-items: flex-start; gap: 10px; padding: 14px 18px;
+    background: rgba(255,255,255,0.1); backdrop-filter: blur(8px);
+    border-radius: 10px; margin-top: 16px; margin-bottom: -12px;
+}
+
+.announcement-icon { font-size: 20px; flex-shrink: 0; }
+.author-announcement p { margin: 0; color: rgba(255,255,255,0.9); font-size: 14px; line-height: 1.6; }
+
+/* ═══ Tabs ═══ */
+.author-tabs {
+    display: flex; gap: 4px; padding: 24px 0 0; border-bottom: 2px solid var(--border, #e5e7eb);
+}
+
+.author-tab {
+    padding: 10px 20px; font-size: 14px; font-weight: 600; text-decoration: none;
+    color: var(--text-muted, #6b7280); border-bottom: 2px solid transparent;
+    margin-bottom: -2px; transition: all 0.2s;
+}
+
+.author-tab:hover { color: var(--primary, #6366f1); }
+.author-tab.active { color: var(--primary, #6366f1); border-bottom-color: var(--primary, #6366f1); }
+
+.author-tab-content { padding: 24px 0 40px; }
+
+.author-novels-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px;
+}
+
+.tab-empty { text-align: center; padding: 40px; color: var(--text-muted); }
+
+/* ═══ Followers Modal ═══ */
+.followers-modal-content { max-width: 420px; max-height: 80vh; overflow-y: auto; }
+
+.follower-item {
+    display: flex; align-items: center; gap: 12px; padding: 10px 16px;
+    border-bottom: 1px solid var(--border-light, #f1f5f9);
+}
+
+.follower-item:last-child { border-bottom: none; }
+
+.follower-avatar { position: relative; flex-shrink: 0; }
+.follower-avatar img { width: 48px; height: 48px; border-radius: 50%; }
+
+.follower-info { flex: 1; }
+.follower-name { font-weight: 600; font-size: 14px; color: var(--text-primary); text-decoration: none; }
+.follower-name:hover { color: var(--primary); }
+
+.followers-empty { text-align: center; padding: 20px; color: var(--text-muted); }
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+    .top-authors-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .authors-grid { grid-template-columns: 1fr; }
+    .author-hero__content { flex-direction: column; align-items: center; text-align: center; }
+    .author-hero__info { padding-top: 12px; }
+    .author-name { font-size: 1.3rem; }
+    .author-stats-grid { justify-content: center; }
+    .author-actions { justify-content: center; }
+    .author-meta-line { justify-content: center; }
+    .author-tabs { overflow-x: auto; }
+    .author-tab { white-space: nowrap; padding: 10px 14px; font-size: 13px; }
+    .author-card { flex-direction: column; align-items: center; text-align: center; }
+    .author-card__actions { justify-content: center; }
+}
+
+@media (max-width: 480px) {
+    .top-authors-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .top-author-card { padding: 14px 8px; }
+    .stat-box { min-width: 60px; padding: 8px 10px; }
+    .stat-num { font-size: 15px; }
+}
+
+/* ═══ Dark Mode ═══ */
+[data-theme="dark"] .author-card { background: #1f2937; border-color: #374151; }
+[data-theme="dark"] .author-card__name a { color: #e5e7eb; }
+[data-theme="dark"] .top-author-card { background: #1f2937; border-color: #374151; }
+[data-theme="dark"] .top-author-card__name a { color: #e5e7eb; }
+[data-theme="dark"] .follower-item { border-color: #374151; }

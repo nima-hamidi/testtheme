@@ -1426,3 +1426,52 @@ function novel_render_chapter_votes($chapter_id, $position = 'top') {
 function novel_render_mini_likes($chapter_id) {
     return Novel_Ratings::render_mini_likes($chapter_id);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * ═══ فاز ۵ - اضافات به functions.php ═══
+ */
+
+// === اضافه به بخش require ها ===
+require_once get_template_directory() . '/inc/class-novel-authors.php';
+require_once get_template_directory() . '/inc/class-novel-follow.php';
+
+// === Initialize ===
+function novel_init_authors() {
+    new Novel_Authors();
+}
+add_action('init', 'novel_init_authors', 15);
+
+function novel_init_follow() {
+    new Novel_Follow();
+}
+add_action('init', 'novel_init_follow', 15);
+
+/**
+ * Replace old novel_ajax_toggle_follow from Phase 3
+ * 
+ * حذف شود: function novel_ajax_toggle_follow() و add_action مربوطه
+ * جایگزین: Novel_Follow::ajax_follow_novel()
+ * 
+ * ⚠️ nonce key تغییر کرده:
+ *   قدیم: 'novel_follow'
+ *   جدید: 'novel_follow_action'
+ *   → در single-novel.php هم آپدیت شود
+ */
+
+/**
+ * User writing toggle check helper
+ */
+function novel_is_user_writing_enabled() {
+    return (bool) get_option('novel_user_writing', true);
+}
