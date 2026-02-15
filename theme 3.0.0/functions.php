@@ -1370,6 +1370,20 @@ function novel_phase3_enqueue_archive_styles() {
     }
 }
 add_action('wp_enqueue_scripts', 'novel_phase3_enqueue_archive_styles');
+/*فاز 12 */
+// === Reader Mode ===
+// (JS/CSS enqueued conditionally on chapter pages)
+function novel_enqueue_reader_assets() {
+    if (is_singular('chapter')) {
+        wp_enqueue_style('novel-reader', get_template_directory_uri() . '/assets/css/reader.css', ['novel-main-style'], FLAVOR_VERSION);
+        wp_enqueue_script('novel-reader', get_template_directory_uri() . '/assets/js/reader.js', ['jquery'], FLAVOR_VERSION, true);
+    }
+}
+add_action('wp_enqueue_scripts', 'novel_enqueue_reader_assets');
+
+// === SEO ===
+require_once get_template_directory() . '/inc/class-novel-seo.php';
+Novel_SEO::get_instance();
 
 // ═══════════════════════════════════════════
 // READING HISTORY TABLE (Create on theme setup)
