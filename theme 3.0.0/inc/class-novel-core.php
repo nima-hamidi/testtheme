@@ -77,6 +77,12 @@ class Novel_Core {
         // ۱. ساخت جداول
         $this->create_tables();
 
+        /*فاز 7*/
+        // Reports table
+        if (class_exists('Novel_Reports')) {
+            Novel_Reports::create_table();
+        }
+
         /*فاز 8*/
         // Search log table
         if (class_exists('Novel_Search')) {
