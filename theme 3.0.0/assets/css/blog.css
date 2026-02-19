@@ -1,0 +1,793 @@
+/**
+ * Novel Blog Styles
+ * استایل‌های بخش وبلاگ
+ * 
+ * @package suspended developer
+ * @since 3.0.0
+ */
+
+/* ═══════════════════════════════════════ */
+/* Variables                               */
+/* ═══════════════════════════════════════ */
+
+:root {
+    --blog-bg: #ffffff;
+    --blog-bg-card: #ffffff;
+    --blog-bg-sidebar: #f8fafc;
+    --blog-border: #e2e8f0;
+    --blog-text: #1e293b;
+    --blog-text-secondary: #64748b;
+    --blog-primary: #6366f1;
+    --blog-primary-light: #818cf8;
+    --blog-radius: 16px;
+    --blog-radius-sm: 10px;
+    --blog-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    --blog-shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+[data-theme="dark"] {
+    --blog-bg: #0f0f1a;
+    --blog-bg-card: #1e1e2e;
+    --blog-bg-sidebar: #1a1a2e;
+    --blog-border: #3f3f5f;
+    --blog-text: #e2e8f0;
+    --blog-text-secondary: #94a3b8;
+    --blog-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+    --blog-shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* ═══════════════════════════════════════ */
+/* Layout                                  */
+/* ═══════════════════════════════════════ */
+
+.novel-blog-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 32px;
+    align-items: start;
+}
+
+/* ═══════════════════════════════════════ */
+/* Filters                                 */
+/* ═══════════════════════════════════════ */
+
+.novel-blog-filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--blog-border);
+}
+
+.novel-blog-filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blog-text-secondary);
+    background: var(--blog-bg-sidebar);
+    text-decoration: none;
+    transition: all 0.25s ease;
+    border: 1px solid transparent;
+}
+
+.novel-blog-filter:hover {
+    color: var(--blog-primary);
+    border-color: var(--blog-primary);
+}
+
+.novel-blog-filter.is-active {
+    background: var(--blog-primary);
+    color: #fff;
+}
+
+.novel-blog-filter__count {
+    font-size: 11px;
+    opacity: 0.7;
+}
+
+/* ═══════════════════════════════════════ */
+/* Blog Grid                               */
+/* ═══════════════════════════════════════ */
+
+.novel-blog-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+/* ═══════════════════════════════════════ */
+/* Blog Card                               */
+/* ═══════════════════════════════════════ */
+
+.novel-blog-card {
+    background: var(--blog-bg-card);
+    border: 1px solid var(--blog-border);
+    border-radius: var(--blog-radius);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.novel-blog-card:hover {
+    box-shadow: var(--blog-shadow-hover);
+    transform: translateY(-4px);
+}
+
+/* Hero card (first post) */
+.novel-blog-card--hero {
+    grid-column: 1 / -1;
+}
+
+.novel-blog-card--hero .novel-blog-card__image {
+    height: 320px;
+}
+
+.novel-blog-card--hero .novel-blog-card__title {
+    font-size: 22px;
+}
+
+.novel-blog-card__image-link {
+    display: block;
+}
+
+.novel-blog-card__image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.novel-blog-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.novel-blog-card:hover .novel-blog-card__img {
+    transform: scale(1.05);
+}
+
+.novel-blog-card__body {
+    padding: 18px;
+}
+
+.novel-blog-card__meta-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.novel-blog-card__category {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--blog-primary);
+    background: rgba(99, 102, 241, 0.1);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.novel-blog-card__category:hover {
+    background: rgba(99, 102, 241, 0.2);
+}
+
+.novel-blog-card__date {
+    font-size: 12px;
+    color: var(--blog-text-secondary);
+}
+
+.novel-blog-card__title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--blog-text);
+    margin: 0 0 8px;
+    line-height: 1.6;
+}
+
+.novel-blog-card__title a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.novel-blog-card__title a:hover {
+    color: var(--blog-primary);
+}
+
+.novel-blog-card__excerpt {
+    font-size: 14px;
+    color: var(--blog-text-secondary);
+    line-height: 1.7;
+    margin: 0 0 14px;
+}
+
+.novel-blog-card__meta-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 14px;
+    border-top: 1px solid var(--blog-border);
+}
+
+.novel-blog-card__author {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.novel-blog-card__author-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.novel-blog-card__author-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blog-text);
+}
+
+.novel-blog-card__stats {
+    display: flex;
+    gap: 12px;
+}
+
+.novel-blog-card__stat {
+    font-size: 12px;
+    color: var(--blog-text-secondary);
+}
+
+/* ═══════════════════════════════════════ */
+/* Sidebar                                 */
+/* ═══════════════════════════════════════ */
+
+.novel-blog-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    position: sticky;
+    top: 100px;
+}
+
+.novel-blog-widget {
+    background: var(--blog-bg-card);
+    border: 1px solid var(--blog-border);
+    border-radius: var(--blog-radius);
+    padding: 20px;
+}
+
+.novel-blog-widget__title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--blog-text);
+    margin: 0 0 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--blog-primary);
+}
+
+/* Recent Posts Widget */
+.novel-blog-widget__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.novel-blog-widget__item {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.novel-blog-widget__thumb {
+    width: 64px;
+    height: 48px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.novel-blog-widget__thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.novel-blog-widget__item-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.novel-blog-widget__item-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blog-text);
+    text-decoration: none;
+    display: block;
+    line-height: 1.5;
+}
+
+.novel-blog-widget__item-title:hover {
+    color: var(--blog-primary);
+}
+
+.novel-blog-widget__item-date {
+    font-size: 11px;
+    color: var(--blog-text-secondary);
+}
+
+/* Categories Widget */
+.novel-blog-widget__cats {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.novel-blog-widget__cats li {
+    margin-bottom: 8px;
+}
+
+.novel-blog-widget__cats a {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: var(--blog-text);
+    text-decoration: none;
+    padding: 6px 0;
+    border-bottom: 1px dashed var(--blog-border);
+    transition: color 0.2s ease;
+}
+
+.novel-blog-widget__cats a:hover {
+    color: var(--blog-primary);
+}
+
+.novel-blog-widget__cats a span {
+    color: var(--blog-text-secondary);
+    font-size: 12px;
+}
+
+/* Tag Cloud Widget */
+.novel-blog-widget__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.novel-blog-widget__tag {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    color: var(--blog-text-secondary);
+    background: var(--blog-bg-sidebar);
+    text-decoration: none;
+    transition: all 0.25s ease;
+    line-height: 1.4;
+}
+
+.novel-blog-widget__tag:hover {
+    background: var(--blog-primary);
+    color: #fff;
+}
+
+/* ═══════════════════════════════════════ */
+/* Blog Single - Hero                      */
+/* ═══════════════════════════════════════ */
+
+.novel-blog-hero {
+    position: relative;
+    height: 400px;
+    overflow: hidden;
+    margin-bottom: 24px;
+}
+
+.novel-blog-hero__image {
+    position: absolute;
+    inset: 0;
+}
+
+.novel-blog-hero__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.novel-blog-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 100%);
+    display: flex;
+    align-items: flex-end;
+}
+
+.novel-blog-hero__content {
+    padding-bottom: 40px;
+}
+
+.novel-blog-hero__cats {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.novel-blog-hero__cat {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    text-decoration: none;
+}
+
+.novel-blog-hero__cat:hover {
+    background: var(--blog-primary);
+}
+
+.novel-blog-hero__title {
+    font-size: 32px;
+    font-weight: 800;
+    color: #fff;
+    margin: 0;
+    line-height: 1.4;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* ═══════════════════════════════════════ */
+/* Blog Single - Content                   */
+/* ═══════════════════════════════════════ */
+
+.novel-blog-single {
+    max-width: 780px;
+    margin: 0 auto;
+}
+
+.novel-blog-single__meta {
+    margin-bottom: 28px;
+}
+
+.novel-blog-single__author {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.novel-blog-single__author-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--blog-primary);
+}
+
+.novel-blog-single__author-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--blog-text);
+    text-decoration: none;
+}
+
+.novel-blog-single__author-name:hover {
+    color: var(--blog-primary);
+}
+
+.novel-blog-single__meta-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+    font-size: 13px;
+    color: var(--blog-text-secondary);
+}
+
+.novel-blog-single__title {
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--blog-text);
+    margin: 0 0 24px;
+    line-height: 1.5;
+}
+
+.novel-blog-single__content {
+    font-size: 16px;
+    line-height: 2;
+    color: var(--blog-text);
+}
+
+.novel-blog-single__content p {
+    margin: 0 0 18px;
+}
+
+.novel-blog-single__content h2,
+.novel-blog-single__content h3 {
+    margin: 32px 0 16px;
+    color: var(--blog-text);
+}
+
+.novel-blog-single__content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    margin: 20px 0;
+}
+
+.novel-blog-single__content blockquote {
+    border-right: 4px solid var(--blog-primary);
+    padding: 16px 20px;
+    margin: 20px 0;
+    background: var(--blog-bg-sidebar);
+    border-radius: 0 12px 12px 0;
+    font-style: italic;
+    color: var(--blog-text-secondary);
+}
+
+/* ═══════════════════════════════════════ */
+/* Tags                                    */
+/* ═══════════════════════════════════════ */
+
+.novel-blog-single__tags {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 32px 0;
+    padding: 20px 0;
+    border-top: 1px solid var(--blog-border);
+}
+
+.novel-blog-single__tags-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--blog-text);
+    margin-left: 4px;
+}
+
+.novel-blog-single__tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    color: var(--blog-primary);
+    background: rgba(99, 102, 241, 0.08);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.novel-blog-single__tag:hover {
+    background: var(--blog-primary);
+    color: #fff;
+}
+
+/* ═══════════════════════════════════════ */
+/* Share Buttons                           */
+/* ═══════════════════════════════════════ */
+
+.novel-blog-single__share {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 24px 0;
+    padding: 20px;
+    background: var(--blog-bg-sidebar);
+    border-radius: var(--blog-radius);
+}
+
+.novel-blog-single__share-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--blog-text);
+}
+
+.novel-blog-single__share-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.novel-share-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-decoration: none;
+}
+
+.novel-share-btn:hover {
+    transform: translateY(-2px);
+}
+
+.novel-share-btn--telegram { background: #0088cc; color: #fff; }
+.novel-share-btn--whatsapp { background: #25d366; color: #fff; }
+.novel-share-btn--twitter { background: #1da1f2; color: #fff; }
+.novel-share-btn--copy { background: var(--blog-border); color: var(--blog-text); }
+.novel-share-btn--copy:hover { background: var(--blog-primary); color: #fff; }
+
+/* ═══════════════════════════════════════ */
+/* Related Posts                           */
+/* ═══════════════════════════════════════ */
+
+.novel-blog-single__related {
+    margin: 40px 0;
+}
+
+.novel-blog-single__related-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--blog-text);
+    margin: 0 0 20px;
+}
+
+.novel-blog-single__related-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.novel-blog-related-card {
+    background: var(--blog-bg-card);
+    border: 1px solid var(--blog-border);
+    border-radius: var(--blog-radius-sm);
+    overflow: hidden;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.novel-blog-related-card:hover {
+    box-shadow: var(--blog-shadow);
+    transform: translateY(-3px);
+}
+
+.novel-blog-related-card__image {
+    height: 140px;
+    overflow: hidden;
+}
+
+.novel-blog-related-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.novel-blog-related-card:hover .novel-blog-related-card__img {
+    transform: scale(1.05);
+}
+
+.novel-blog-related-card__body {
+    padding: 14px;
+}
+
+.novel-blog-related-card__cat {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--blog-primary);
+    text-transform: uppercase;
+}
+
+.novel-blog-related-card__title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--blog-text);
+    margin: 6px 0;
+    line-height: 1.5;
+}
+
+.novel-blog-related-card__date {
+    font-size: 12px;
+    color: var(--blog-text-secondary);
+}
+
+/* ═══════════════════════════════════════ */
+/* Blog Comments                           */
+/* ═══════════════════════════════════════ */
+
+.novel-blog-single__comments {
+    max-width: 780px;
+    margin: 32px auto;
+}
+
+/* ═══════════════════════════════════════ */
+/* Responsive                              */
+/* ═══════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+    .novel-blog-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .novel-blog-sidebar {
+        position: static;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .novel-blog-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .novel-blog-card--hero .novel-blog-card__image {
+        height: 220px;
+    }
+
+    .novel-blog-card--hero .novel-blog-card__title {
+        font-size: 18px;
+    }
+
+    .novel-blog-hero {
+        height: 300px;
+    }
+
+    .novel-blog-hero__title {
+        font-size: 22px;
+    }
+
+    .novel-blog-single__title {
+        font-size: 22px;
+    }
+
+    .novel-blog-single__related-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .novel-blog-sidebar {
+        grid-template-columns: 1fr;
+    }
+
+    .novel-blog-single__share {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .novel-blog-single__meta-row {
+        gap: 10px;
+    }
+
+    .novel-blog-filters {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 12px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .novel-blog-filter {
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .novel-blog-card__body {
+        padding: 14px;
+    }
+
+    .novel-blog-card__title {
+        font-size: 15px;
+    }
+
+    .novel-blog-card__image {
+        height: 160px;
+    }
+
+    .novel-blog-hero__content {
+        padding-bottom: 24px;
+    }
+}

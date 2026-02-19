@@ -110,8 +110,17 @@ class Novel_Settings {
             'authors'           => ['title' => 'صفحه نویسندگان', 'group' => 'authors'],
             'subscriptions'     => ['title' => 'اشتراک (RCP)', 'group' => 'coins'],
             'coins'             => ['title' => 'سیستم سکه', 'group' => 'coins'],
-            'polls'             => ['title' => 'نظرسنجی', 'group' => 'extras'],
-            'achievements'      => ['title' => 'دستاوردها و مدال', 'group' => 'extras'],
+            /*فاز 13*/
+            'polls' => [
+                'title'       => '📊 نظرسنجی',
+                'group'       => 'extras',
+                'description' => 'سیستم نظرسنجی و رأی‌گیری',
+                'option'      => 'novel_module_polls',
+                'default'     => true,
+            ],
+            /*تا اینجا فاز 13 اصلاح شد*/
+            
+                        'achievements'      => ['title' => 'دستاوردها و مدال', 'group' => 'extras'],
             'seo'               => ['title' => 'SEO اختصاصی', 'group' => 'core'],
             'follow'            => ['title' => 'فالو نویسنده و رمان', 'group' => 'social'],
             'stickers'          => ['title' => 'استیکر و GIF', 'group' => 'comments'],

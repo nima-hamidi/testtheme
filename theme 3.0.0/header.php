@@ -53,6 +53,156 @@ if ($announcement_active && !empty($announcement)) :
 </div>
 <?php endif; ?>
 
+
+<!--فاز 13 -->
+
+<?php
+/**
+ * Announcement Banner - اصلاح شده
+ * تمام آپشن‌ها از novel_announcement_ استفاده می‌کنند
+ * 
+ * اضافه شود به header.php بعد از <body <?php body_class(); ?>>
+ * و قبل از <header>
+ * 
+ * @package suspended developer
+ * @since 3.0.0
+ */
+
+// === اضافه شود بعد از <body> ===
+?>
+
+<?php
+// ═══ بنر اطلاعیه سایت (Announcement Banner) ═══
+// ⚠️ novel_announcement_ prefix (نه novel_banner_ که مربوط به بنر نویسنده است)
+$announcement_enabled = get_option('novel_announcement_enabled', false);
+
+if ($announcement_enabled):
+    $announcement_text       = get_option('novel_announcement_text', '');
+    $announcement_type       = get_option('novel_announcement_type', 'info');
+    $announcement_link_url   = get_option('novel_announcement_link_url', '');
+    $announcement_link_text  = get_option('novel_announcement_link_text', '');
+    $announcement_start      = get_option('novel_announcement_start_date', '');
+    $announcement_end        = get_option('novel_announcement_end_date', '');
+    $announcement_dismissible = get_option('novel_announcement_dismissible', true);
+    $announcement_audience   = get_option('novel_announcement_audience', 'all');
+
+    // ═══ بررسی شرایط نمایش ═══
+
+    $show_announcement = true;
+
+    // بررسی مخاطب
+    if ($announcement_audience === 'logged_in' && !is_user_logged_in()) {
+        $show_announcement = false;
+    }
+    if ($announcement_audience === 'logged_out' && is_user_logged_in()) {
+        $show_announcement = false;
+    }
+
+    // بررسی تاریخ
+    $now = current_time('mysql');
+    if (!empty($announcement_start) && $now < $announcement_start) {
+        $show_announcement = false;
+    }
+    if (!empty($announcement_end) && $now > $announcement_end) {
+        $show_announcement = false;
+    }
+
+    // بررسی محتوا
+    if (empty(trim($announcement_text))) {
+        $show_announcement = false;
+    }
+
+    // شناسه یکتا (برای localStorage - تغییر با هر بار ویرایش متن)
+    $announcement_hash = md5($announcement_text . $announcement_type);
+
+    if ($show_announcement):
+        // آیکون‌های SVG هر نوع
+        $announcement_icons = [
+            'info'    => '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>',
+            'warning' => '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>',
+            'danger'  => '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg>',
+            'success' => '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>',
+            'promo'   => '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>',
+        ];
+        ?>
+        <div class="novel-announcement novel-announcement--<?php echo esc_attr($announcement_type); ?>"
+             id="novelAnnouncement"
+             data-announcement-id="<?php echo esc_attr($announcement_hash); ?>"
+             data-dismissible="<?php echo $announcement_dismissible ? '1' : '0'; ?>"
+             style="display: none;">
+            <div class="novel-announcement__inner novel-container">
+                <span class="novel-announcement__icon">
+                    <?php echo $announcement_icons[$announcement_type] ?? $announcement_icons['info']; ?>
+                </span>
+                <div class="novel-announcement__content">
+                    <span class="novel-announcement__text">
+                        <?php echo wp_kses($announcement_text, [
+                            'a'      => ['href' => [], 'target' => [], 'rel' => []],
+                            'b'      => [],
+                            'em'     => [],
+                            'strong' => [],
+                        ]); ?>
+                    </span>
+                    <?php if (!empty($announcement_link_url) && !empty($announcement_link_text)): ?>
+                        <a href="<?php echo esc_url($announcement_link_url); ?>"
+                           class="novel-announcement__link">
+                            <?php echo esc_html($announcement_link_text); ?>
+                        </a>
+                    <?php endif; ?>
+                </div>
+                <?php if ($announcement_dismissible): ?>
+                    <button class="novel-announcement__close" id="novelAnnouncementClose"
+                            aria-label="بستن بنر" title="بستن">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" 
+                             stroke="currentColor" stroke-width="2.5">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <script>
+        (function() {
+            var el = document.getElementById('novelAnnouncement');
+            if (!el) return;
+
+            var announcementId = el.dataset.announcementId;
+            var dismissible = el.dataset.dismissible === '1';
+            var storageKey = 'novel_announcement_closed_' + announcementId;
+
+            // بررسی آیا قبلاً بسته شده (۲۴ ساعت)
+            if (dismissible) {
+                var closedTime = localStorage.getItem(storageKey);
+                if (closedTime) {
+                    var elapsed = Date.now() - parseInt(closedTime, 10);
+                    if (elapsed < 86400000) { // 24 ساعت = 86400000ms
+                        return; // نمایش نده
+                    }
+                    localStorage.removeItem(storageKey);
+                }
+            }
+
+            // نمایش بنر با انیمیشن
+            el.style.display = '';
+            el.style.animation = 'novelAnnouncementSlideDown 0.4s ease';
+
+            // دکمه بسته شدن
+            if (dismissible) {
+                var closeBtn = document.getElementById('novelAnnouncementClose');
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', function() {
+                        el.style.animation = 'novelAnnouncementSlideUp 0.3s ease forwards';
+                        localStorage.setItem(storageKey, Date.now().toString());
+                        setTimeout(function() { el.remove(); }, 300);
+                    });
+                }
+            }
+        })();
+        </script>
+    <?php endif; endif; ?>
+
 <!-- ═══ Header ═══ -->
 <header class="novel-header" role="banner">
     <div class="novel-header-inner">

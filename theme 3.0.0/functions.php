@@ -100,6 +100,19 @@ if (is_admin()) {
     require_once get_template_directory() . '/inc/admin/class-novel-admin-coins.php';
     Novel_Admin_Coins::get_instance();
 }
+
+/*فاز 13*/
+// Polls Module
+if (get_option('novel_module_polls', true)) {
+    require_once get_template_directory() . '/inc/class-novel-polls.php';
+    Novel_Polls::get_instance();
+
+    if (is_admin()) {
+        require_once get_template_directory() . '/inc/admin/class-novel-admin-polls.php';
+        Novel_Admin_Polls::get_instance();
+    }
+}
+
 // ═══════════════════════════════════════
 // لود شرطی ماژول‌ها بر اساس تنظیمات
 // ═══════════════════════════════════════
@@ -246,7 +259,7 @@ function novel_enqueue_assets() {
     if (is_search()) {
         wp_enqueue_style('novel-search', NOVEL_ASSETS . 'css/search.css', ['novel-main'], NOVEL_VERSION);
     }
-    if (is_singular('post')) {
+    if (is_singular('post') || is_home() || is_category() || is_tag() || is_archive()) {
         wp_enqueue_style('novel-blog', NOVEL_ASSETS . 'css/blog.css', ['novel-main'], NOVEL_VERSION);
     }
     if (is_404()) {
@@ -1522,3 +1535,104 @@ function novel_deactivation_cleanup() {
     wp_clear_scheduled_hook('novel_check_coin_expiry');
 }
 add_action('switch_theme', 'novel_deactivation_cleanup');
+
+
+
+
+/*فاز 13*/
+
+<?php
+/**
+ * Blog Helper Functions
+ * اضافه شود به functions.php
+ */
+
+// === اضافه شود به functions.php ===
+
+/**
+ * محاسبه زمان مطالعه
+ */
+if (!function_exists('novel_blog_reading_time')) {
+    function novel_blog_reading_time($content) {
+        $word_count = mb_str_word_count(strip_tags($content));
+        $reading_speed = 200; // کلمه فارسی در دقیقه
+        $time = max(1, ceil($word_count / $reading_speed));
+        return $time;
+    }
+}
+
+/**
+ * شمارش کلمات فارسی
+ */
+if (!function_exists('mb_str_word_count')) {
+    function mb_str_word_count($string) {
+        $string = strip_tags($string);
+        $string = preg_replace('/\s+/u', ' ', $string);
+        $words = preg_split('/\s+/u', trim($string));
+        return count(array_filter($words));
+    }
+}
+
+// Blog assets  چون قبلا بودش کامنت شد
+
+/*add_action('wp_enqueue_scripts', function() {
+    if (is_home() || is_category() || is_tag() || is_singular('post') || is_archive()) {
+        wp_enqueue_style(
+            'novel-blog',
+            get_template_directory_uri() . '/assets/css/blog.css',
+            ['novel-main-style'],
+            JEsuspended_DEVELOPER_VERSION
+        );
+    }
+});*/
+
+// Genre term meta
+add_action('genre_add_form_fields', 'novel_genre_add_fields');
+add_action('genre_edit_form_fields', 'novel_genre_edit_fields', 10, 2);
+add_action('created_genre', 'novel_genre_save_fields');
+add_action('edited_genre', 'novel_genre_save_fields');
+
+function novel_genre_add_fields() {
+    ?>
+    <div class="form-field">
+        <label for="genre_icon">آیکون ژانر</label>
+        <input type="text" name="genre_icon" id="genre_icon" value="" placeholder="مثال: 🗡">
+        <p class="description">آیکون اموجی ژانر</p>
+    </div>
+    <div class="form-field">
+        <label for="genre_color">رنگ ژانر</label>
+        <input type="color" name="genre_color" id="genre_color" value="#6366f1">
+        <p class="description">رنگ اختصاصی ژانر</p>
+    </div>
+    <?php
+}
+
+function novel_genre_edit_fields($term) {
+    $icon = get_term_meta($term->term_id, 'genre_icon', true);
+    $color = get_term_meta($term->term_id, 'genre_color', true) ?: '#6366f1';
+    ?>
+    <tr class="form-field">
+        <th><label for="genre_icon">آیکون ژانر</label></th>
+        <td>
+            <input type="text" name="genre_icon" id="genre_icon" value="<?php echo esc_attr($icon); ?>">
+            <p class="description">آیکون اموجی ژانر</p>
+        </td>
+    </tr>
+    <tr class="form-field">
+        <th><label for="genre_color">رنگ ژانر</label></th>
+        <td>
+            <input type="color" name="genre_color" id="genre_color" value="<?php echo esc_attr($color); ?>">
+            <p class="description">رنگ اختصاصی ژانر</p>
+        </td>
+    </tr>
+    <?php
+}
+
+function novel_genre_save_fields($term_id) {
+    if (isset($_POST['genre_icon'])) {
+        update_term_meta($term_id, 'genre_icon', sanitize_text_field($_POST['genre_icon']));
+    }
+    if (isset($_POST['genre_color'])) {
+        update_term_meta($term_id, 'genre_color', sanitize_hex_color($_POST['genre_color']));
+    }
+}

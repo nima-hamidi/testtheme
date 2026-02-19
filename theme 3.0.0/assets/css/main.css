@@ -1851,3 +1851,533 @@ textarea.novel-input {
         font-size: 1.15rem;
     }
 }
+
+
+
+
+/*فاز 13*/
+
+/**
+ * Announcement Banner Styles (اصلاح شده)
+ * ⚠️ تمام کلاس‌ها از novel-announcement استفاده می‌کنند
+ *    (نه novel-banner که مربوط به بنر تبلیغاتی نویسنده است)
+ * 
+ * اضافه شود به انتهای assets/css/main.css
+ */
+
+/* ═══════════════════════════════════════ */
+/* Site Announcement Banner                */
+/* (متفاوت از Author Ad Banner)           */
+/* ═══════════════════════════════════════ */
+
+.novel-announcement {
+    position: relative;
+    z-index: 1000;
+    padding: 10px 0;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.novel-announcement__inner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 16px;
+}
+
+.novel-announcement__icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    opacity: 0.9;
+}
+
+.novel-announcement__content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.novel-announcement__text {
+    flex: 1;
+}
+
+.novel-announcement__text a {
+    text-decoration: underline;
+    font-weight: 600;
+}
+
+.novel-announcement__link {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none !important;
+    white-space: nowrap;
+    transition: opacity 0.2s ease;
+}
+
+.novel-announcement__link:hover {
+    opacity: 0.85;
+}
+
+.novel-announcement__close {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+    background: transparent;
+}
+
+.novel-announcement__close:hover {
+    transform: scale(1.1);
+}
+
+/* ═══ Types ═══ */
+
+.novel-announcement--info {
+    background: #dbeafe;
+    color: #1e40af;
+    border-bottom: 1px solid #93c5fd;
+}
+.novel-announcement--info .novel-announcement__link { background: #1e40af; color: #fff; }
+.novel-announcement--info .novel-announcement__close { color: #1e40af; }
+.novel-announcement--info .novel-announcement__close:hover { background: rgba(30, 64, 175, 0.1); }
+
+.novel-announcement--warning {
+    background: #fef3c7;
+    color: #92400e;
+    border-bottom: 1px solid #fcd34d;
+}
+.novel-announcement--warning .novel-announcement__link { background: #92400e; color: #fff; }
+.novel-announcement--warning .novel-announcement__close { color: #92400e; }
+.novel-announcement--warning .novel-announcement__close:hover { background: rgba(146, 64, 14, 0.1); }
+
+.novel-announcement--danger {
+    background: #fee2e2;
+    color: #991b1b;
+    border-bottom: 1px solid #fca5a5;
+}
+.novel-announcement--danger .novel-announcement__link { background: #991b1b; color: #fff; }
+.novel-announcement--danger .novel-announcement__close { color: #991b1b; }
+.novel-announcement--danger .novel-announcement__close:hover { background: rgba(153, 27, 27, 0.1); }
+
+.novel-announcement--success {
+    background: #d1fae5;
+    color: #065f46;
+    border-bottom: 1px solid #6ee7b7;
+}
+.novel-announcement--success .novel-announcement__link { background: #065f46; color: #fff; }
+.novel-announcement--success .novel-announcement__close { color: #065f46; }
+.novel-announcement--success .novel-announcement__close:hover { background: rgba(6, 95, 70, 0.1); }
+
+.novel-announcement--promo {
+    background: linear-gradient(90deg, #7c3aed, #6366f1, #8b5cf6);
+    color: #fff;
+    border-bottom: none;
+}
+.novel-announcement--promo .novel-announcement__link { 
+    background: rgba(255, 255, 255, 0.2); 
+    color: #fff; 
+    backdrop-filter: blur(4px); 
+}
+.novel-announcement--promo .novel-announcement__close { color: #fff; }
+.novel-announcement--promo .novel-announcement__close:hover { background: rgba(255, 255, 255, 0.15); }
+.novel-announcement--promo .novel-announcement__text a { color: #fff; }
+
+/* ═══ Dark Mode ═══ */
+
+[data-theme="dark"] .novel-announcement--info {
+    background: #1e293b;
+    color: #93c5fd;
+    border-color: #1e3a5f;
+}
+
+[data-theme="dark"] .novel-announcement--warning {
+    background: #292524;
+    color: #fcd34d;
+    border-color: #44403c;
+}
+
+[data-theme="dark"] .novel-announcement--danger {
+    background: #2d1b1b;
+    color: #fca5a5;
+    border-color: #44201b;
+}
+
+[data-theme="dark"] .novel-announcement--success {
+    background: #1a2e26;
+    color: #6ee7b7;
+    border-color: #1e4039;
+}
+
+/* promo در دارک‌مود تغییری نمی‌کند (gradient خودش تاریک هست) */
+
+/* ═══ Animations ═══ */
+
+@keyframes novelAnnouncementSlideDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes novelAnnouncementSlideUp {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+}
+
+/* ═══ Responsive ═══ */
+
+@media (max-width: 640px) {
+    .novel-announcement {
+        font-size: 13px;
+        padding: 8px 0;
+    }
+
+    .novel-announcement__inner {
+        gap: 8px;
+    }
+
+    .novel-announcement__content {
+        gap: 8px;
+    }
+
+    .novel-announcement__link {
+        padding: 3px 10px;
+        font-size: 12px;
+    }
+}
+
+
+
+
+
+
+
+/**
+ * Genre & Tag Cloud Styles
+ * اضافه شود به main.css
+ */
+
+/* ═══════════════════════════════════════ */
+/* Genres Grid                             */
+/* ═══════════════════════════════════════ */
+
+.novel-genres-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 48px;
+}
+
+.novel-genre-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 20px;
+    background: var(--color-bg-card, #fff);
+    border: 1px solid var(--color-border, #e2e8f0);
+    border-radius: 14px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-right: 4px solid var(--genre-color, #6366f1);
+}
+
+.novel-genre-card:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    border-color: var(--genre-color);
+}
+
+[data-theme="dark"] .novel-genre-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.novel-genre-card__icon {
+    font-size: 32px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--genre-color) 10%, transparent);
+    border-radius: 12px;
+    flex-shrink: 0;
+}
+
+.novel-genre-card:hover .novel-genre-card__icon {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+}
+
+.novel-genre-card__info {
+    flex: 1;
+    min-width: 0;
+}
+
+.novel-genre-card__name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-text, #1e293b);
+    margin: 0 0 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.novel-genre-card__count {
+    font-size: 12px;
+    color: var(--color-text-secondary, #64748b);
+}
+
+.novel-genre-card__arrow {
+    color: var(--color-text-secondary, #64748b);
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.novel-genre-card:hover .novel-genre-card__arrow {
+    color: var(--genre-color);
+    transform: translateX(-4px);
+}
+
+/* ═══════════════════════════════════════ */
+/* Tag Cloud                               */
+/* ═══════════════════════════════════════ */
+
+.novel-tag-cloud-section {
+    margin: 40px 0;
+    padding: 32px;
+    background: var(--color-bg-card, #fff);
+    border: 1px solid var(--color-border, #e2e8f0);
+    border-radius: 20px;
+    text-align: center;
+}
+
+.novel-tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.novel-tag-cloud__item {
+    display: inline-block;
+    padding: 5px 14px;
+    border-radius: 8px;
+    color: var(--tag-color, #6366f1);
+    background: color-mix(in srgb, var(--tag-color, #6366f1) 8%, transparent);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.25s ease;
+    line-height: 1.5;
+}
+
+.novel-tag-cloud__item:hover {
+    background: var(--tag-color, #6366f1);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .novel-genres-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .novel-genres-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .novel-genre-card {
+        padding: 14px 16px;
+    }
+
+    .novel-genre-card__icon {
+        font-size: 26px;
+        width: 42px;
+        height: 42px;
+    }
+
+    .novel-genre-card__name {
+        font-size: 14px;
+    }
+
+    .novel-genre-card__arrow {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .novel-genres-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .novel-tag-cloud-section {
+        padding: 20px;
+    }
+
+    .novel-tag-cloud {
+        gap: 8px;
+    }
+}
+
+
+
+
+
+
+/**
+ * Genre Archive Styles
+ * اضافه شود به main.css
+ */
+
+/* ═══════════════════════════════════════ */
+/* Genre Header                            */
+/* ═══════════════════════════════════════ */
+
+.novel-genre-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 28px;
+    background: var(--color-bg-card, #fff);
+    border: 1px solid var(--color-border, #e2e8f0);
+    border-radius: 20px;
+    margin-bottom: 24px;
+    border-right: 5px solid var(--genre-color, #6366f1);
+}
+
+.novel-genre-header__icon {
+    font-size: 48px;
+    width: 72px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--genre-color) 10%, transparent);
+    border-radius: 16px;
+    flex-shrink: 0;
+}
+
+.novel-genre-header__title {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--color-text, #1e293b);
+    margin: 0 0 4px;
+}
+
+.novel-genre-header__desc {
+    font-size: 14px;
+    color: var(--color-text-secondary, #64748b);
+    margin: 0 0 4px;
+    line-height: 1.7;
+}
+
+.novel-genre-header__count {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--genre-color, #6366f1);
+}
+
+/* ═══════════════════════════════════════ */
+/* Genre Sort                              */
+/* ═══════════════════════════════════════ */
+
+.novel-genre-sort {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--color-border, #e2e8f0);
+}
+
+.novel-genre-sort__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 7px 16px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text-secondary, #64748b);
+    background: var(--color-bg-secondary, #f8fafc);
+    text-decoration: none;
+    transition: all 0.25s ease;
+    border: 1px solid transparent;
+}
+
+.novel-genre-sort__item:hover {
+    color: var(--color-primary, #6366f1);
+    border-color: var(--color-primary, #6366f1);
+}
+
+.novel-genre-sort__item.is-active {
+    background: var(--color-primary, #6366f1);
+    color: #fff;
+}
+
+/* Novel Grid 4 columns */
+.novel-grid--4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+@media (max-width: 1024px) {
+    .novel-grid--4 { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 768px) {
+    .novel-grid--4 { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+
+    .novel-genre-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .novel-genre-header__title { font-size: 20px; }
+
+    .novel-genre-sort {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .novel-genre-sort__item {
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .novel-grid--4 { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+}

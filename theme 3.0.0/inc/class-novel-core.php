@@ -107,6 +107,12 @@ class Novel_Core {
             Novel_Coins::create_tables();
         }
         
+        /* فاز 13*/
+        // Polls tables
+        if (class_exists('Novel_Polls')) {
+            Novel_Polls::create_tables();
+        }
+        
         // ۲. ساخت صفحات پیش‌فرض
         $this->create_default_pages();
 

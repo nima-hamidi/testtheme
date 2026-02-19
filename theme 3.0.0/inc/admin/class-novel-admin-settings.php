@@ -35,7 +35,10 @@ class Novel_Admin_Settings {
         add_submenu_page('novel-settings', 'تنظیمات عمومی', 'تنظیمات عمومی', 'manage_options', 'novel-settings');
         add_submenu_page('novel-settings', 'ماژول‌ها', 'ماژول‌ها', 'manage_options', 'novel-modules', [$this, 'render_modules_page']);
         add_submenu_page('novel-settings', 'ظاهر و طراحی', 'ظاهر و طراحی', 'manage_options', 'novel-appearance', [$this, 'render_appearance_page']);
-    }
+        /*فاز 13*/
+        add_submenu_page('novel-settings', 'بنر اطلاعیه', 'بنر اطلاعیه',
+        'manage_options', 'novel-announcement', [$this, 'render_announcement_page']);
+        }
 
     /**
      * Assets ادمین
@@ -505,6 +508,243 @@ class Novel_Admin_Settings {
         echo '<p>این بخش در فازهای بعد تکمیل می‌شود.</p>';
         $this->render_page_footer();
     }
+
+
+    /* فاز 13*/
+
+/**
+ * Announcement Banner Settings Section
+ * بخش تنظیمات بنر اطلاعیه سایت
+ * 
+ * ⚠️ تمام آپشن‌ها از prefix novel_announcement_ استفاده می‌کنند
+ *    (نه novel_banner_ که مربوط به بنر تبلیغاتی نویسنده است)
+ * 
+ * اضافه شود به class-novel-admin-settings.php → render_settings_page()
+ * به عنوان تب/بخش جدید «بنر اطلاعیه»
+ * 
+ * @package suspended developer
+ * @since 3.0.0
+ */
+
+// === این متد به کلاس Novel_Admin_Settings اضافه شود ===
+
+/**
+ * رندر تنظیمات بنر اطلاعیه سایت
+ */
+public function render_announcement_settings_section() {
+    // ذخیره تنظیمات
+    if (isset($_POST['novel_save_announcement']) && wp_verify_nonce($_POST['_wpnonce_announcement'] ?? '', 'novel_announcement_settings')) {
+        update_option('novel_announcement_enabled', !empty($_POST['novel_announcement_enabled']));
+        update_option('novel_announcement_text', wp_kses($_POST['novel_announcement_text'] ?? '', [
+            'a'      => ['href' => [], 'target' => [], 'rel' => []],
+            'b'      => [],
+            'em'     => [],
+            'strong' => [],
+        ]));
+        update_option('novel_announcement_type', sanitize_text_field($_POST['novel_announcement_type'] ?? 'info'));
+        update_option('novel_announcement_link_url', esc_url_raw($_POST['novel_announcement_link_url'] ?? ''));
+        update_option('novel_announcement_link_text', sanitize_text_field($_POST['novel_announcement_link_text'] ?? ''));
+        update_option('novel_announcement_start_date', sanitize_text_field($_POST['novel_announcement_start_date'] ?? ''));
+        update_option('novel_announcement_end_date', sanitize_text_field($_POST['novel_announcement_end_date'] ?? ''));
+        update_option('novel_announcement_dismissible', !empty($_POST['novel_announcement_dismissible']));
+        update_option('novel_announcement_audience', sanitize_text_field($_POST['novel_announcement_audience'] ?? 'all'));
+
+        echo '<div class="notice notice-success is-dismissible"><p>تنظیمات بنر اطلاعیه ذخیره شد. ✅</p></div>';
+    }
+
+    $enabled     = get_option('novel_announcement_enabled', false);
+    $text        = get_option('novel_announcement_text', '');
+    $type        = get_option('novel_announcement_type', 'info');
+    $link_url    = get_option('novel_announcement_link_url', '');
+    $link_text   = get_option('novel_announcement_link_text', '');
+    $start_date  = get_option('novel_announcement_start_date', '');
+    $end_date    = get_option('novel_announcement_end_date', '');
+    $dismissible = get_option('novel_announcement_dismissible', true);
+    $audience    = get_option('novel_announcement_audience', 'all');
+    ?>
+
+    <form method="post">
+        <?php wp_nonce_field('novel_announcement_settings', '_wpnonce_announcement'); ?>
+        <input type="hidden" name="novel_save_announcement" value="1">
+
+        <div class="novel-admin-section">
+            <h2>📢 بنر اطلاعیه سایت</h2>
+            <p class="description">
+                بنر اطلاعیه بالای سایت نمایش داده می‌شود. 
+                <br><em>⚠️ این با «بنر تبلیغاتی نویسنده» متفاوت است. بنر نویسنده در تنظیمات جداگانه مدیریت می‌شود.</em>
+            </p>
+
+            <table class="form-table">
+                <tr>
+                    <th><label for="novel_announcement_enabled">فعال‌سازی</label></th>
+                    <td>
+                        <label>
+                            <input type="checkbox" id="novel_announcement_enabled" 
+                                   name="novel_announcement_enabled"
+                                   value="1" <?php checked($enabled); ?>>
+                            نمایش بنر اطلاعیه در بالای سایت
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <th><label for="novel_announcement_text">متن بنر</label></th>
+                    <td>
+                        <textarea id="novel_announcement_text" name="novel_announcement_text" 
+                                  rows="3" class="large-text" 
+                                  placeholder="متن اطلاعیه... (HTML ساده مجاز: a, b, em, strong)"
+                        ><?php echo esc_textarea($text); ?></textarea>
+                        <p class="description">تگ‌های مجاز: <code>&lt;a&gt;</code>, <code>&lt;b&gt;</code>, <code>&lt;em&gt;</code>, <code>&lt;strong&gt;</code></p>
+                    </td>
+                </tr>
+                <tr>
+                    <th>نوع / رنگ</th>
+                    <td>
+                        <fieldset>
+                            <label style="margin-left: 16px;">
+                                <input type="radio" name="novel_announcement_type" value="info" 
+                                       <?php checked($type, 'info'); ?>>
+                                🔵 اطلاعیه (آبی)
+                            </label>
+                            <label style="margin-left: 16px;">
+                                <input type="radio" name="novel_announcement_type" value="warning" 
+                                       <?php checked($type, 'warning'); ?>>
+                                🟡 هشدار (زرد)
+                            </label>
+                            <label style="margin-left: 16px;">
+                                <input type="radio" name="novel_announcement_type" value="danger" 
+                                       <?php checked($type, 'danger'); ?>>
+                                🔴 خطر (قرمز)
+                            </label>
+                            <label style="margin-left: 16px;">
+                                <input type="radio" name="novel_announcement_type" value="success" 
+                                       <?php checked($type, 'success'); ?>>
+                                🟢 موفقیت (سبز)
+                            </label>
+                            <label style="margin-left: 16px;">
+                                <input type="radio" name="novel_announcement_type" value="promo" 
+                                       <?php checked($type, 'promo'); ?>>
+                                🟣 ویژه (بنفش gradient)
+                            </label>
+                        </fieldset>
+                    </td>
+                </tr>
+                <tr>
+                    <th><label for="novel_announcement_link_url">لینک (اختیاری)</label></th>
+                    <td>
+                        <input type="url" id="novel_announcement_link_url" 
+                               name="novel_announcement_link_url"
+                               value="<?php echo esc_url($link_url); ?>" 
+                               class="regular-text"
+                               placeholder="https://example.com">
+                        <br>
+                        <input type="text" id="novel_announcement_link_text" 
+                               name="novel_announcement_link_text"
+                               value="<?php echo esc_attr($link_text); ?>" 
+                               class="regular-text"
+                               placeholder="متن دکمه لینک (مثلاً: بیشتر بخوانید)" 
+                               style="margin-top: 6px;">
+                        <p class="description">اگر لینک و متن وارد شود، دکمه‌ای در بنر نمایش داده می‌شود.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th><label>زمان‌بندی (اختیاری)</label></th>
+                    <td>
+                        <label style="display: inline-block; margin-bottom: 8px;">
+                            شروع:
+                            <input type="datetime-local" name="novel_announcement_start_date"
+                                   value="<?php echo esc_attr($start_date); ?>">
+                        </label>
+                        <br>
+                        <label>
+                            پایان:
+                            <input type="datetime-local" name="novel_announcement_end_date"
+                                   value="<?php echo esc_attr($end_date); ?>">
+                        </label>
+                        <p class="description">اگر خالی باشد، بنر بدون محدودیت زمانی نمایش داده می‌شود. بعد از تاریخ پایان خودکار مخفی می‌شود.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th>قابل بسته‌شدن</th>
+                    <td>
+                        <label>
+                            <input type="checkbox" name="novel_announcement_dismissible"
+                                   value="1" <?php checked($dismissible); ?>>
+                            کاربر بتواند بنر را ببندد (دکمه ×)
+                        </label>
+                        <p class="description">بعد از بسته شدن، ۲۴ ساعت بعد دوباره نمایش داده می‌شود (یا تا تغییر متن بنر).</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th>نمایش برای</th>
+                    <td>
+                        <fieldset>
+                            <label style="margin-left: 16px;">
+                                <input type="radio" name="novel_announcement_audience" value="all" 
+                                       <?php checked($audience, 'all'); ?>>
+                                همه بازدیدکنندگان
+                            </label>
+                            <label style="margin-left: 16px;">
+                                <input type="radio" name="novel_announcement_audience" value="logged_in" 
+                                       <?php checked($audience, 'logged_in'); ?>>
+                                فقط کاربران لاگین‌شده
+                            </label>
+                            <label style="margin-left: 16px;">
+                                <input type="radio" name="novel_announcement_audience" value="logged_out" 
+                                       <?php checked($audience, 'logged_out'); ?>>
+                                فقط مهمانان (غیرلاگین)
+                            </label>
+                        </fieldset>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- پیش‌نمایش -->
+            <?php if ($enabled && !empty(trim($text))): ?>
+                <div style="margin-top: 20px; padding: 16px; background: #f0f4ff; border-radius: 10px;">
+                    <h4 style="margin: 0 0 10px;">👁 پیش‌نمایش بنر فعلی:</h4>
+                    <div class="novel-announcement-preview" style="
+                        padding: 10px 16px;
+                        border-radius: 8px;
+                        font-size: 14px;
+                        <?php
+                        $preview_styles = [
+                            'info'    => 'background:#dbeafe;color:#1e40af;border:1px solid #93c5fd;',
+                            'warning' => 'background:#fef3c7;color:#92400e;border:1px solid #fcd34d;',
+                            'danger'  => 'background:#fee2e2;color:#991b1b;border:1px solid #fca5a5;',
+                            'success' => 'background:#d1fae5;color:#065f46;border:1px solid #6ee7b7;',
+                            'promo'   => 'background:linear-gradient(90deg,#7c3aed,#6366f1);color:#fff;',
+                        ];
+                        echo $preview_styles[$type] ?? $preview_styles['info'];
+                        ?>
+                    ">
+                        <?php echo wp_kses($text, ['a' => ['href' => []], 'b' => [], 'em' => [], 'strong' => []]); ?>
+                        <?php if ($link_url && $link_text): ?>
+                            <span style="margin-right: 10px; padding: 3px 10px; border-radius: 5px; background: rgba(0,0,0,0.15); font-weight: 700;">
+                                <?php echo esc_html($link_text); ?>
+                            </span>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <?php submit_button('💾 ذخیره تنظیمات بنر اطلاعیه'); ?>
+        </div>
+    </form>
+
+    <?php
+}
+
+
+/**
+ * صفحه بنر اطلاعیه
+ */
+public function render_announcement_page() {
+    if (!current_user_can('manage_options')) return;
+    $this->render_page_header('بنر اطلاعیه');
+    $this->render_announcement_settings_section();
+    $this->render_page_footer();
+}
+
 
     /**
      * ذخیره تنظیمات
