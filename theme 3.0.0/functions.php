@@ -113,6 +113,40 @@ if (get_option('novel_module_polls', true)) {
     }
 }
 
+/* فاز 14 */
+// === Achievements Module ===
+if (get_option('novel_module_achievements', true)) {
+    require_once get_template_directory() . '/inc/class-novel-achievements.php';
+    Novel_Achievements::get_instance();
+
+    require_once get_template_directory() . '/inc/class-novel-challenges.php';
+    Novel_Challenges::get_instance();
+
+    if (is_admin()) {
+        require_once get_template_directory() . '/inc/admin/class-novel-admin-achievements.php';
+        Novel_Admin_Achievements::get_instance();
+    }
+}
+
+
+// === Smart Features Module ===
+if (get_option('novel_module_smart_features', true)) {
+    require_once get_template_directory() . '/inc/class-novel-smart-features.php';
+    Novel_Smart_Features::get_instance();
+}
+
+// === Quiz Module ===
+if (get_option('novel_module_quiz', true)) {
+    require_once get_template_directory() . '/inc/class-novel-quiz.php';
+    Novel_Quiz::get_instance();
+}
+
+// === Author Banners Module ===
+if (get_option('novel_module_banners', true)) {
+    require_once get_template_directory() . '/inc/class-novel-author-banners.php';
+    Novel_Author_Banners::get_instance();
+}
+
 // ═══════════════════════════════════════
 // لود شرطی ماژول‌ها بر اساس تنظیمات
 // ═══════════════════════════════════════
@@ -1636,3 +1670,111 @@ function novel_genre_save_fields($term_id) {
         update_term_meta($term_id, 'genre_color', sanitize_hex_color($_POST['genre_color']));
     }
 }
+
+
+
+
+
+/*فاز 14*/
+
+// === Contact Form Handler ===
+add_action('wp_ajax_novel_contact_form', 'novel_handle_contact_form');
+add_action('wp_ajax_nopriv_novel_contact_form', 'novel_handle_contact_form');
+
+function novel_handle_contact_form() {
+    if (!wp_verify_nonce($_POST['contact_nonce'] ?? '', 'novel_contact_nonce')) {
+        wp_send_json_error(['message' => 'خطای امنیتی. صفحه را رفرش کنید.']);
+    }
+
+    // Honeypot
+    if (!empty($_POST['novel_hp_field'])) {
+        wp_send_json_error(['message' => 'درخواست نامعتبر.']);
+    }
+
+    // Rate limit
+    $ip = $_SERVER['REMOTE_ADDR'];
+    $rate_key = 'novel_contact_' . md5($ip);
+    if (get_transient($rate_key)) {
+        wp_send_json_error(['message' => 'لطفاً چند دقیقه صبر کنید و دوباره تلاش کنید.']);
+    }
+
+    $name    = sanitize_text_field($_POST['contact_name'] ?? '');
+    $email   = sanitize_email($_POST['contact_email'] ?? '');
+    $subject = sanitize_text_field($_POST['contact_subject'] ?? '');
+    $message = sanitize_textarea_field($_POST['contact_message'] ?? '');
+
+    if (empty($name) || empty($email) || empty($subject) || empty($message)) {
+        wp_send_json_error(['message' => 'لطفاً تمام فیلدها را پر کنید.']);
+    }
+
+    if (!is_email($email)) {
+        wp_send_json_error(['message' => 'ایمیل نامعتبر است.']);
+    }
+
+    if (mb_strlen($message) < 20) {
+        wp_send_json_error(['message' => 'پیام باید حداقل ۲۰ کاراکتر باشد.']);
+    }
+
+    $subject_labels = [
+        'general'     => 'سوال عمومی',
+        'bug'         => 'گزارش مشکل فنی',
+        'suggestion'  => 'پیشنهاد',
+        'copyright'   => 'حق نشر / DMCA',
+        'partnership' => 'همکاری',
+        'other'       => 'سایر',
+    ];
+
+    $email_subject = sprintf('[تماس با ما] %s - %s', $subject_labels[$subject] ?? $subject, $name);
+
+    $email_body = sprintf(
+        "نام: %s\nایمیل: %s\nموضوع: %s\nIP: %s\n\n---\n\n%s",
+        $name,
+        $email,
+        $subject_labels[$subject] ?? $subject,
+        $ip,
+        $message
+    );
+
+    $headers = [
+        'Content-Type: text/plain; charset=UTF-8',
+        sprintf('Reply-To: %s <%s>', $name, $email),
+    ];
+
+    $sent = wp_mail(get_option('admin_email'), $email_subject, $email_body, $headers);
+
+    if ($sent) {
+        set_transient($rate_key, 1, 120); // 2 دقیقه rate limit
+        wp_send_json_success(['message' => 'پیام شما ارسال شد! ✅ به‌زودی پاسخ خواهیم داد.']);
+    } else {
+        wp_send_json_error(['message' => 'خطا در ارسال پیام. لطفاً دوباره تلاش کنید.']);
+    }
+}
+
+// Compare page assets
+add_action('wp_enqueue_scripts', function() {
+    if (is_page_template('templates/novel/compare.php') || is_page('compare')) {
+        wp_enqueue_style('novel-compare', get_template_directory_uri() . '/assets/css/compare.css', [], JEsuspended_DEVELOPER_VERSION);
+        wp_enqueue_script('novel-compare', get_template_directory_uri() . '/assets/js/compare.js', ['jquery'], JEsuspended_DEVELOPER_VERSION, true);
+    }
+});
+
+
+
+// ═══════════════════════════════════════
+// Pages CSS/JS
+// ═══════════════════════════════════════
+// === Pages CSS ===
+add_action('wp_enqueue_scripts', function() {
+    // Static pages styles
+    if (is_page_template(['page-about.php', 'page-contact.php', 'page-faq.php']) || is_404()) {
+        wp_enqueue_style(
+            'novel-pages',
+            get_template_directory_uri() . '/assets/css/pages.css',
+            ['novel-main-style'],
+            JEsuspended_DEVELOPER_VERSION
+        );
+    }
+});
+
+
+

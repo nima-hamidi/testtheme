@@ -1,0 +1,517 @@
+/**
+ * Novel Smart Features Styles
+ * حال‌وهوا، پیشنهادات، catch-up، تنظیمات تم
+ * 
+ * @package suspended developer
+ * @since 3.0.0
+ */
+
+:root {
+    --smart-bg: #ffffff;
+    --smart-bg-card: #f8fafc;
+    --smart-border: #e2e8f0;
+    --smart-text: #1e293b;
+    --smart-text-secondary: #64748b;
+    --smart-primary: #6366f1;
+    --smart-radius: 16px;
+    --smart-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="dark"] {
+    --smart-bg: #1e1e2e;
+    --smart-bg-card: #262637;
+    --smart-border: #3f3f5f;
+    --smart-text: #e2e8f0;
+    --smart-text-secondary: #94a3b8;
+    --smart-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* ═══════════════════════════════════════ */
+/* Mood Discovery                          */
+/* ═══════════════════════════════════════ */
+
+.novel-mood-section {
+    padding: 48px 0;
+}
+
+.novel-mood-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.novel-mood-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 20px 16px;
+    background: var(--smart-bg);
+    border: 2px solid var(--smart-border);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.novel-mood-btn:hover {
+    border-color: var(--mood-color);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--mood-color) 20%, transparent);
+}
+
+.novel-mood-btn:active {
+    transform: translateY(-2px);
+}
+
+.novel-mood-btn__icon {
+    font-size: 36px;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.novel-mood-btn:hover .novel-mood-btn__icon {
+    transform: scale(1.2);
+}
+
+.novel-mood-btn__label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--smart-text);
+    text-align: center;
+    line-height: 1.4;
+}
+
+/* Results */
+.novel-mood-results__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.novel-mood-results__title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--smart-text);
+    margin: 0;
+}
+
+.novel-mood-results__back {
+    background: none;
+    border: none;
+    color: var(--smart-primary);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+}
+
+.novel-mood-results__back:hover {
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.novel-mood-results__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+/* Smart Card (for mood results) */
+.novel-smart-card {
+    background: var(--smart-bg);
+    border: 1px solid var(--smart-border);
+    border-radius: 14px;
+    overflow: hidden;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.novel-smart-card:hover {
+    box-shadow: var(--smart-shadow);
+    transform: translateY(-3px);
+}
+
+.novel-smart-card__image {
+    height: 160px;
+    overflow: hidden;
+}
+
+.novel-smart-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.novel-smart-card:hover .novel-smart-card__img {
+    transform: scale(1.05);
+}
+
+.novel-smart-card__img-placeholder {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    background: var(--smart-bg-card);
+}
+
+.novel-smart-card__body {
+    padding: 14px;
+}
+
+.novel-smart-card__title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--smart-text);
+    margin: 0 0 6px;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.novel-smart-card__rating {
+    font-size: 13px;
+    color: #f59e0b;
+    font-weight: 600;
+}
+
+/* ═══════════════════════════════════════ */
+/* Daily Recommendations                   */
+/* ═══════════════════════════════════════ */
+
+.novel-daily-section {
+    padding: 48px 0;
+    background: var(--smart-bg-card);
+}
+
+.novel-daily-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+}
+
+.novel-daily-loading {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+    color: var(--smart-text-secondary);
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.novel-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--smart-border);
+    border-top-color: var(--smart-primary);
+    border-radius: 50%;
+    animation: novelSpin 0.8s linear infinite;
+}
+
+@keyframes novelSpin {
+    to { transform: rotate(360deg); }
+}
+
+/* Recommendation Card */
+.novel-rec-card {
+    background: var(--smart-bg);
+    border: 1px solid var(--smart-border);
+    border-radius: 14px;
+    overflow: hidden;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.novel-rec-card:hover {
+    box-shadow: var(--smart-shadow);
+    transform: translateY(-4px);
+}
+
+.novel-rec-card__image {
+    height: 180px;
+    overflow: hidden;
+}
+
+.novel-rec-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.novel-rec-card:hover .novel-rec-card__img {
+    transform: scale(1.05);
+}
+
+.novel-rec-card__img-placeholder {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    background: var(--smart-bg-card);
+}
+
+.novel-rec-card__body {
+    padding: 14px;
+}
+
+.novel-rec-card__title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--smart-text);
+    margin: 0 0 4px;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.novel-rec-card__rating {
+    font-size: 13px;
+    color: #f59e0b;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.novel-rec-card__reason {
+    font-size: 12px;
+    color: var(--smart-text-secondary);
+    margin: 0;
+    line-height: 1.5;
+    font-style: italic;
+}
+
+/* ═══════════════════════════════════════ */
+/* Catch-up Banner                         */
+/* ═══════════════════════════════════════ */
+
+.novel-catchup-banner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.08));
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 14px;
+    margin-bottom: 20px;
+    animation: catchupSlideIn 0.5s ease;
+}
+
+[data-theme="dark"] .novel-catchup-banner {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(139, 92, 246, 0.12));
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+@keyframes catchupSlideIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.novel-catchup-banner__icon {
+    font-size: 32px;
+    flex-shrink: 0;
+}
+
+.novel-catchup-banner__content {
+    flex: 1;
+}
+
+.novel-catchup-banner__text {
+    font-size: 14px;
+    color: var(--smart-text);
+    margin: 0;
+    line-height: 1.6;
+}
+
+.novel-catchup-banner__text strong {
+    color: var(--smart-primary);
+}
+
+.novel-catchup-banner__actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════ */
+/* Theme Settings                          */
+/* ═══════════════════════════════════════ */
+
+.novel-theme-settings {
+    margin: 24px 0;
+}
+
+.novel-theme-settings__title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--smart-text);
+    margin: 0 0 12px;
+}
+
+.novel-theme-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.novel-theme-option {
+    display: flex;
+    flex-direction: column;
+    padding: 14px 16px;
+    background: var(--smart-bg-card);
+    border: 2px solid var(--smart-border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.novel-theme-option:hover {
+    border-color: var(--smart-primary);
+}
+
+.novel-theme-option.is-active {
+    border-color: var(--smart-primary);
+    background: rgba(99, 102, 241, 0.05);
+}
+
+.novel-theme-radio {
+    display: none;
+}
+
+.novel-theme-option__label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--smart-text);
+}
+
+.novel-theme-option__desc {
+    font-size: 12px;
+    color: var(--smart-text-secondary);
+    margin-top: 2px;
+}
+
+.novel-night-filter-toggle {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.novel-night-filter-toggle label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--smart-text);
+    cursor: pointer;
+}
+
+.novel-night-filter-toggle small {
+    font-size: 12px;
+    padding-right: 26px;
+}
+
+/* ═══════════════════════════════════════ */
+/* Section Subtitle                        */
+/* ═══════════════════════════════════════ */
+
+.novel-section-subtitle {
+    font-size: 14px;
+    color: var(--smart-text-secondary);
+    margin: 4px 0 0;
+}
+
+/* ═══════════════════════════════════════ */
+/* Responsive                              */
+/* ═══════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+    .novel-daily-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .novel-mood-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+
+    .novel-mood-btn {
+        padding: 14px 10px;
+    }
+
+    .novel-mood-btn__icon {
+        font-size: 28px;
+    }
+
+    .novel-mood-btn__label {
+        font-size: 11px;
+    }
+
+    .novel-mood-results__grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .novel-daily-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .novel-catchup-banner {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .novel-catchup-banner__actions {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .novel-catchup-banner__actions .novel-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .novel-theme-options {
+        grid-template-columns: 1fr;
+    }
+
+    .novel-mood-results__header {
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 480px) {
+    .novel-mood-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .novel-mood-results__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .novel-daily-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .novel-smart-card__image,
+    .novel-rec-card__image {
+        height: 140px;
+    }
+}

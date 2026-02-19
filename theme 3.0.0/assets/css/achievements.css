@@ -1,0 +1,448 @@
+/**
+ * Novel Achievements & Challenges Styles
+ * 
+ * @package suspended developer
+ * @since 3.0.0
+ */
+
+:root {
+    --ach-bg: #ffffff;
+    --ach-bg-card: #f8fafc;
+    --ach-border: #e2e8f0;
+    --ach-text: #1e293b;
+    --ach-text-secondary: #64748b;
+    --ach-primary: #6366f1;
+    --ach-success: #10b981;
+    --ach-gold: #f59e0b;
+    --ach-radius: 16px;
+    --ach-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="dark"] {
+    --ach-bg: #1e1e2e;
+    --ach-bg-card: #262637;
+    --ach-border: #3f3f5f;
+    --ach-text: #e2e8f0;
+    --ach-text-secondary: #94a3b8;
+    --ach-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* ═══════════════════════════════════════ */
+/* Achievement Header                      */
+/* ═══════════════════════════════════════ */
+
+.novel-ach-header {
+    background: var(--ach-bg);
+    border: 1px solid var(--ach-border);
+    border-radius: var(--ach-radius);
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.novel-ach-header__stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.novel-ach-stat {
+    text-align: center;
+}
+
+.novel-ach-stat__number {
+    display: block;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--ach-primary);
+}
+
+.novel-ach-stat__label {
+    font-size: 13px;
+    color: var(--ach-text-secondary);
+}
+
+.novel-ach-progress-total {
+    height: 10px;
+    background: var(--ach-bg-card);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.novel-ach-progress-total__bar {
+    height: 100%;
+    background: linear-gradient(90deg, #6366f1, #8b5cf6, #a855f7);
+    border-radius: 10px;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ═══════════════════════════════════════ */
+/* Tabs                                    */
+/* ═══════════════════════════════════════ */
+
+.novel-ach-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    overflow-x: auto;
+}
+
+.novel-ach-tab {
+    padding: 8px 18px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ach-text-secondary);
+    background: var(--ach-bg-card);
+    text-decoration: none;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+    border: 1px solid transparent;
+}
+
+.novel-ach-tab:hover {
+    color: var(--ach-primary);
+    border-color: var(--ach-primary);
+}
+
+.novel-ach-tab.is-active {
+    background: var(--ach-primary);
+    color: #fff;
+}
+
+/* ═══════════════════════════════════════ */
+/* Achievement Grid                        */
+/* ═══════════════════════════════════════ */
+
+.novel-ach-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+}
+
+/* ═══════════════════════════════════════ */
+/* Achievement Card                        */
+/* ═══════════════════════════════════════ */
+
+.novel-ach-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px;
+    background: var(--ach-bg);
+    border: 1px solid var(--ach-border);
+    border-radius: 14px;
+    transition: all 0.3s ease;
+}
+
+.novel-ach-card:hover {
+    box-shadow: var(--ach-shadow);
+}
+
+.novel-ach-card.is-locked {
+    opacity: 0.6;
+}
+
+.novel-ach-card.is-locked:hover {
+    opacity: 0.8;
+}
+
+.novel-ach-card.is-earned {
+    border-color: var(--ach-gold);
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.03), rgba(245, 158, 11, 0.08));
+}
+
+.novel-ach-card__icon {
+    font-size: 36px;
+    width: 54px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ach-bg-card);
+    border-radius: 14px;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.novel-ach-card.is-earned .novel-ach-card__icon {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.novel-ach-card__lock {
+    font-size: 20px;
+    opacity: 0.5;
+}
+
+.novel-ach-card__info {
+    flex: 1;
+    min-width: 0;
+}
+
+.novel-ach-card__title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ach-text);
+    margin: 0 0 2px;
+}
+
+.novel-ach-card__desc {
+    font-size: 12px;
+    color: var(--ach-text-secondary);
+    margin: 0 0 6px;
+    line-height: 1.5;
+}
+
+.novel-ach-card__date {
+    font-size: 11px;
+    color: var(--ach-success);
+    font-weight: 600;
+}
+
+.novel-ach-card__points {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ach-gold);
+    white-space: nowrap;
+}
+
+/* Progress Bar */
+.novel-ach-card__progress {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.novel-ach-card__progress-bar {
+    flex: 1;
+    height: 6px;
+    background: var(--ach-bg-card);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.novel-ach-card__progress-fill {
+    height: 100%;
+    background: var(--ach-primary);
+    border-radius: 6px;
+    transition: width 0.5s ease;
+}
+
+.novel-ach-card__progress-text {
+    font-size: 11px;
+    color: var(--ach-text-secondary);
+    white-space: nowrap;
+    font-weight: 600;
+}
+
+/* ═══════════════════════════════════════ */
+/* Achievement Popup                       */
+/* ═══════════════════════════════════════ */
+
+.novel-ach-popup-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: achPopupFadeIn 0.3s ease;
+}
+
+.novel-ach-popup {
+    background: var(--ach-bg);
+    border-radius: 24px;
+    padding: 40px;
+    text-align: center;
+    max-width: 380px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: achPopupBounce 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+.novel-ach-popup__confetti {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.novel-ach-popup__label {
+    font-size: 16px;
+    color: var(--ach-gold);
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.novel-ach-popup__icon {
+    font-size: 64px;
+    display: block;
+    margin-bottom: 16px;
+    animation: achIconPulse 1s ease infinite;
+}
+
+.novel-ach-popup__title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--ach-text);
+    margin: 0 0 8px;
+}
+
+.novel-ach-popup__desc {
+    font-size: 14px;
+    color: var(--ach-text-secondary);
+    margin: 0 0 24px;
+    line-height: 1.6;
+}
+
+.novel-ach-popup__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 28px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: transform 0.2s ease;
+}
+
+.novel-ach-popup__btn:hover {
+    transform: scale(1.05);
+}
+
+@keyframes achPopupFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes achPopupBounce {
+    from { opacity: 0; transform: scale(0.5); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes achIconPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+}
+
+/* ═══════════════════════════════════════ */
+/* Challenge Cards                         */
+/* ═══════════════════════════════════════ */
+
+.novel-ach-challenges {
+    margin-top: 32px;
+}
+
+.novel-ach-challenges__title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ach-text);
+    margin: 0 0 16px;
+}
+
+.novel-ach-challenges__list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.novel-challenge-card {
+    display: flex;
+    gap: 16px;
+    padding: 18px;
+    background: var(--ach-bg);
+    border: 1px solid var(--ach-border);
+    border-radius: 14px;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.novel-challenge-card:hover { box-shadow: var(--ach-shadow); }
+.novel-challenge-card.is-joined { border-color: var(--ach-primary); }
+
+.novel-challenge-card__icon { font-size: 36px; flex-shrink: 0; }
+.novel-challenge-card__body { flex: 1; min-width: 0; }
+.novel-challenge-card__title { font-size: 15px; font-weight: 700; color: var(--ach-text); margin: 0 0 4px; }
+.novel-challenge-card__desc { font-size: 13px; color: var(--ach-text-secondary); margin: 0 0 8px; }
+.novel-challenge-card__completed { font-size: 13px; color: var(--ach-success); font-weight: 700; margin-top: 6px; }
+
+.novel-challenge-card__progress { margin-top: 8px; }
+.novel-challenge-card__progress-bar { height: 8px; background: var(--ach-bg-card); border-radius: 8px; overflow: hidden; }
+.novel-challenge-card__progress-fill { height: 100%; background: linear-gradient(90deg, #6366f1, #8b5cf6); border-radius: 8px; transition: width 0.5s ease; }
+.novel-challenge-card__progress-text { font-size: 12px; color: var(--ach-text-secondary); margin-top: 4px; display: block; }
+
+.novel-challenge-card__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--ach-text-secondary);
+    text-align: left;
+    white-space: nowrap;
+}
+
+/* Full challenge cards (page) */
+.novel-challenges-page { padding: 40px 0; min-height: 60vh; }
+.novel-challenges-grid { display: grid; gap: 20px; max-width: 700px; margin: 0 auto; }
+
+.novel-challenge-card-full {
+    background: var(--ach-bg);
+    border: 1px solid var(--ach-border);
+    border-radius: var(--ach-radius);
+    padding: 24px;
+    transition: all 0.3s ease;
+}
+.novel-challenge-card-full:hover { box-shadow: var(--ach-shadow); }
+.novel-challenge-card-full.is-completed { border-color: var(--ach-success); background: rgba(16, 185, 129, 0.03); }
+
+.novel-challenge-card-full__header { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+.novel-challenge-card-full__icon { font-size: 40px; }
+.novel-challenge-card-full__title { font-size: 18px; font-weight: 700; color: var(--ach-text); margin: 0; }
+.novel-challenge-card-full__type { font-size: 12px; color: var(--ach-text-secondary); }
+.novel-challenge-card-full__status { margin-right: auto; font-size: 12px; font-weight: 600; }
+.novel-challenge-card-full__desc { font-size: 14px; color: var(--ach-text-secondary); margin: 0 0 12px; line-height: 1.7; }
+.novel-challenge-card-full__target { font-size: 14px; color: var(--ach-text); font-weight: 600; margin-bottom: 12px; }
+
+.novel-challenge-card-full__progress { margin: 16px 0; }
+.novel-challenge-card-full__progress-bar { height: 12px; background: var(--ach-bg-card); border-radius: 12px; overflow: hidden; }
+.novel-challenge-card-full__progress-fill { height: 100%; background: linear-gradient(90deg, #6366f1, #8b5cf6); border-radius: 12px; transition: width 0.8s ease; }
+.novel-challenge-card-full__progress-info { display: flex; justify-content: space-between; margin-top: 6px; font-size: 13px; color: var(--ach-text-secondary); font-weight: 600; }
+.novel-challenge-card-full__completed { text-align: center; padding: 12px; background: rgba(16,185,129,0.1); border-radius: 10px; color: var(--ach-success); font-weight: 700; font-size: 15px; margin: 12px 0; }
+
+.novel-challenge-card-full__footer { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--ach-border); }
+.novel-challenge-card-full__meta { display: flex; gap: 16px; font-size: 13px; color: var(--ach-text-secondary); flex-wrap: wrap; }
+
+/* ═══════════════════════════════════════ */
+/* Responsive                              */
+/* ═══════════════════════════════════════ */
+
+@media (max-width: 768px) {
+    .novel-ach-grid { grid-template-columns: 1fr; }
+    .novel-ach-header__stats { gap: 20px; }
+    .novel-ach-stat__number { font-size: 22px; }
+    .novel-challenge-card { flex-direction: column; align-items: stretch; }
+    .novel-challenge-card__meta { flex-direction: row; flex-wrap: wrap; }
+    .novel-challenge-card-full__footer { flex-direction: column; gap: 12px; }
+    .novel-ach-popup { padding: 30px 20px; }
+    .novel-ach-popup__icon { font-size: 48px; }
+    .novel-ach-popup__title { font-size: 18px; }
+}
+
+@media (max-width: 480px) {
+    .novel-ach-header__stats { flex-direction: column; gap: 12px; }
+    .novel-ach-tabs { gap: 6px; }
+    .novel-ach-tab { padding: 6px 12px; font-size: 12px; }
+    .novel-ach-card { padding: 12px; gap: 10px; }
+    .novel-ach-card__icon { width: 44px; height: 44px; font-size: 28px; }
+}

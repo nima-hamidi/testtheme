@@ -1,0 +1,347 @@
+/**
+ * Novel Compare Styles
+ * 
+ * @package suspended developer
+ * @since 3.0.0
+ */
+
+:root {
+    --cmp-bg: #ffffff;
+    --cmp-bg-card: #f8fafc;
+    --cmp-border: #e2e8f0;
+    --cmp-text: #1e293b;
+    --cmp-text-secondary: #64748b;
+    --cmp-primary: #6366f1;
+    --cmp-best: #10b981;
+    --cmp-radius: 16px;
+    --cmp-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="dark"] {
+    --cmp-bg: #1e1e2e;
+    --cmp-bg-card: #262637;
+    --cmp-border: #3f3f5f;
+    --cmp-text: #e2e8f0;
+    --cmp-text-secondary: #94a3b8;
+    --cmp-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* ═══════════════════════════════════════ */
+/* Selector                                */
+/* ═══════════════════════════════════════ */
+
+.novel-compare-selector {
+    max-width: 800px;
+    margin: 0 auto 32px;
+    background: var(--cmp-bg);
+    border: 1px solid var(--cmp-border);
+    border-radius: var(--cmp-radius);
+    padding: 28px;
+    box-shadow: var(--cmp-shadow);
+}
+
+.novel-compare-inputs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.novel-compare-input-wrap label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--cmp-text);
+    margin-bottom: 6px;
+}
+
+.novel-compare-search-wrap {
+    position: relative;
+}
+
+.novel-compare-search {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--cmp-border);
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: inherit;
+    background: var(--cmp-bg);
+    color: var(--cmp-text);
+    transition: border-color 0.2s ease;
+    box-sizing: border-box;
+}
+
+.novel-compare-search:focus {
+    outline: none;
+    border-color: var(--cmp-primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+/* Dropdown */
+.novel-compare-dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: var(--cmp-bg);
+    border: 1px solid var(--cmp-border);
+    border-radius: 12px;
+    box-shadow: var(--cmp-shadow);
+    max-height: 250px;
+    overflow-y: auto;
+    z-index: 100;
+}
+
+.novel-compare-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.novel-compare-option:hover {
+    background: var(--cmp-bg-card);
+}
+
+.novel-compare-option--empty {
+    cursor: default;
+    color: var(--cmp-text-secondary);
+    font-size: 13px;
+    justify-content: center;
+}
+
+.novel-compare-option__img {
+    width: 36px;
+    height: 48px;
+    border-radius: 6px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.novel-compare-option__img-ph {
+    width: 36px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--cmp-bg-card);
+    border-radius: 6px;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.novel-compare-option__title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--cmp-text);
+    display: block;
+}
+
+.novel-compare-option__meta {
+    font-size: 11px;
+    color: #f59e0b;
+}
+
+#compareSubmit {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+/* ═══════════════════════════════════════ */
+/* Comparison Table                        */
+/* ═══════════════════════════════════════ */
+
+.novel-compare-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 24px;
+}
+
+.novel-compare-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--cmp-bg);
+    border: 1px solid var(--cmp-border);
+    border-radius: var(--cmp-radius);
+    overflow: hidden;
+}
+
+.novel-compare-th-label {
+    width: 120px;
+    background: var(--cmp-bg-card);
+}
+
+.novel-compare-th-novel {
+    text-align: center;
+    padding: 20px 16px;
+    background: var(--cmp-bg-card);
+    border-bottom: 2px solid var(--cmp-border);
+}
+
+.novel-compare-novel-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.novel-compare-img {
+    width: 80px;
+    height: 110px;
+    border-radius: 10px;
+    object-fit: cover;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.novel-compare-novel-link:hover .novel-compare-img {
+    transform: scale(1.05);
+}
+
+.novel-compare-novel-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--cmp-text);
+    line-height: 1.4;
+}
+
+.novel-compare-novel-link:hover .novel-compare-novel-title {
+    color: var(--cmp-primary);
+}
+
+.novel-compare-table tbody tr {
+    border-bottom: 1px solid var(--cmp-border);
+}
+
+.novel-compare-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.novel-compare-table tbody tr:hover {
+    background: rgba(99, 102, 241, 0.02);
+}
+
+.novel-compare-label {
+    padding: 14px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--cmp-text-secondary);
+    background: var(--cmp-bg-card);
+    white-space: nowrap;
+    border-left: 1px solid var(--cmp-border);
+}
+
+.novel-compare-value {
+    padding: 14px 16px;
+    font-size: 14px;
+    color: var(--cmp-text);
+    text-align: center;
+    vertical-align: middle;
+    border-left: 1px solid var(--cmp-border);
+}
+
+.novel-compare-value.is-best {
+    color: var(--cmp-best);
+    font-weight: 700;
+    background: rgba(16, 185, 129, 0.05);
+}
+
+.novel-compare-value a {
+    color: var(--cmp-primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.novel-compare-value a:hover {
+    text-decoration: underline;
+}
+
+.novel-compare-stars {
+    color: #f59e0b;
+    font-weight: 700;
+    font-size: 15px;
+}
+
+/* ═══════════════════════════════════════ */
+/* Share Link                              */
+/* ═══════════════════════════════════════ */
+
+.novel-compare-share {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 20px;
+    background: var(--cmp-bg-card);
+    border: 1px solid var(--cmp-border);
+    border-radius: 12px;
+    margin-bottom: 32px;
+}
+
+.novel-compare-share span {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--cmp-text);
+    white-space: nowrap;
+}
+
+.novel-compare-share-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid var(--cmp-border);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--cmp-text-secondary);
+    background: var(--cmp-bg);
+    font-family: inherit;
+    direction: ltr;
+}
+
+/* ═══════════════════════════════════════ */
+/* Responsive                              */
+/* ═══════════════════════════════════════ */
+
+@media (max-width: 768px) {
+    .novel-compare-inputs {
+        grid-template-columns: 1fr;
+    }
+
+    .novel-compare-table {
+        font-size: 13px;
+    }
+
+    .novel-compare-img {
+        width: 60px;
+        height: 85px;
+    }
+
+    .novel-compare-novel-title {
+        font-size: 12px;
+    }
+
+    .novel-compare-label,
+    .novel-compare-value {
+        padding: 10px 12px;
+    }
+
+    .novel-compare-share {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .novel-compare-th-label {
+        width: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .novel-compare-selector {
+        padding: 18px;
+    }
+}

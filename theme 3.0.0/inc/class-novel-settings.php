@@ -119,14 +119,37 @@ class Novel_Settings {
                 'default'     => true,
             ],
             /*تا اینجا فاز 13 اصلاح شد*/
-            
-                        'achievements'      => ['title' => 'دستاوردها و مدال', 'group' => 'extras'],
+            /*فاز 14 */
+            'achievements' => [
+                'title'       => 'دستاوردها و مدال',
+                'group'       => 'extras',
+                'description' => 'سیستم مدال، دستاورد و چالش مطالعه',
+                'option'      => 'novel_module_achievements',
+                'default'     => true,
+            ],
+            /*تا اینجا فاز 14*/
+
             'seo'               => ['title' => 'SEO اختصاصی', 'group' => 'core'],
             'follow'            => ['title' => 'فالو نویسنده و رمان', 'group' => 'social'],
             'stickers'          => ['title' => 'استیکر و GIF', 'group' => 'comments'],
             'volumes'           => ['title' => 'فصل‌بندی/جلدبندی', 'group' => 'core'],
-            'quiz'              => ['title' => 'مسابقه کتابخوانی', 'group' => 'extras'],
-            'author_banners'    => ['title' => 'بنرهای نویسنده', 'group' => 'authors'],
+            /*فاز 14*/
+            'quiz' => [
+            'label'       => '🏆 مسابقات',
+            'description' => 'سیستم مسابقه کتابخوانی آنلاین',
+            'option'      => 'novel_module_quiz',
+            'default'     => true,
+             ],
+
+             'author_banners' => [
+            'title'       => 'بنرهای نویسنده',
+            'group'       => 'authors',
+            'description' => 'نویسندگان بنر تبلیغاتی در قسمت‌ها قرار دهند',
+            'option'      => 'novel_module_banners',
+            'default'     => true,
+              ],
+             /*اتمام فاز 14 */
+             
 
             // ═══ ماژول‌های فرعی (فعال/غیرفعال UI) ═══
             'comment_likes'     => ['title' => 'لایک/دیسلایک دیدگاه', 'group' => 'comments'],
@@ -156,6 +179,15 @@ class Novel_Settings {
             'similar_novels'    => ['title' => 'رمان‌های مشابه', 'group' => 'core'],
             'content_tags'      => ['title' => 'تگ‌های محتوایی', 'group' => 'core'],
             'dark_mode'         => ['title' => 'دارک‌مود', 'group' => 'core'],
+
+            /*فاز 14*/
+            'smart_features' => [
+            'label'       => '🧠 قابلیت‌های هوشمند',
+            'description' => 'حالت شبانه خودکار، پیشنهادات روزانه، فیلتر احساسی',
+            'option'      => 'novel_module_smart_features',
+            'default'     => true,
+            ],
+            /*اتمام فاز 14*/
         ];
     }
 

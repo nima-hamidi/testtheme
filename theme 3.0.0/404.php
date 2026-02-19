@@ -1,54 +1,79 @@
 <?php
 /**
- * فایل: 404.php
- * توضیح: صفحه خطای ۴۰۴ - طراحی زیبا با انیمیشن
- * نسخه: 2.0.0
+ * 404 Error Page (Enhanced)
+ * 
+ * @package suspended developer
+ * @since 3.0.0
  */
 
+if (!defined('ABSPATH')) exit;
+
 get_header();
+
+// رمان‌های محبوب
+$popular_novels = get_posts([
+    'post_type'      => 'novel',
+    'posts_per_page' => 3,
+    'post_status'    => 'publish',
+    'meta_key'       => '_novel_views',
+    'orderby'        => 'meta_value_num',
+    'order'          => 'DESC',
+]);
 ?>
 
-<div class="novel-error-page">
-    <div class="novel-error-content">
-        <!-- انیمیشن SVG -->
-        <div class="novel-error-illustration">
-            <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <!-- کتاب باز -->
-                <rect x="30" y="60" width="60" height="80" rx="4" fill="var(--primary-light)" opacity="0.3"/>
-                <rect x="110" y="60" width="60" height="80" rx="4" fill="var(--primary-light)" opacity="0.3"/>
-                <rect x="88" y="55" width="24" height="90" rx="2" fill="var(--primary)" opacity="0.6"/>
-                <!-- علامت سوال -->
-                <text x="100" y="120" text-anchor="middle" font-size="48" font-weight="900" fill="var(--primary)" opacity="0.8">?</text>
-                <!-- ذره‌ها -->
-                <circle cx="40" cy="40" r="3" fill="var(--accent)" opacity="0.6">
-                    <animate attributeName="cy" values="40;30;40" dur="3s" repeatCount="indefinite"/>
-                </circle>
-                <circle cx="160" cy="50" r="2" fill="var(--secondary)" opacity="0.5">
-                    <animate attributeName="cy" values="50;35;50" dur="2.5s" repeatCount="indefinite"/>
-                </circle>
-                <circle cx="80" cy="170" r="2.5" fill="var(--warning)" opacity="0.6">
-                    <animate attributeName="cy" values="170;160;170" dur="2s" repeatCount="indefinite"/>
-                </circle>
-            </svg>
-        </div>
+<main class="novel-main">
+    <div class="novel-container">
+        <div class="novel-error-page">
 
-        <div class="novel-error-code"><?php echo esc_html(novel_fa_num('404')); ?></div>
-        <h1 class="novel-error-title">صفحه مورد نظر یافت نشد!</h1>
-        <p class="novel-error-description">
-            شاید این صفحه حذف شده یا آدرس آن تغییر کرده باشد.
-            <br>
-            نگران نباشید، هزاران رمان جذاب منتظر شماست! 📚
-        </p>
+            <!-- انیمیشن SVG -->
+            <div class="novel-error-page__illustration">
+                <div class="novel-error-dragon">
+                    <span class="novel-error-dragon__emoji">🐉</span>
+                    <span class="novel-error-dragon__map">🗺️</span>
+                </div>
+            </div>
 
-        <div class="novel-error-actions">
-            <a href="<?php echo esc_url(home_url('/')); ?>" class="novel-btn novel-btn-primary novel-btn-lg">
-                بازگشت به خانه
-            </a>
-            <a href="<?php echo esc_url(get_post_type_archive_link('novel')); ?>" class="novel-btn novel-btn-secondary novel-btn-lg">
-                مرور رمان‌ها
-            </a>
+            <h1 class="novel-error-page__code">۴۰۴</h1>
+
+            <h2 class="novel-error-page__title">
+                اوه! اینجا سرزمین ناشناخته‌هاست! 🐉
+            </h2>
+
+            <p class="novel-error-page__desc">
+                صفحه‌ای که دنبالش بودید در هیچ دنیای داستانی وجود نداره!
+                <br>شاید آدرس رو اشتباه وارد کردی یا صفحه حذف شده.
+            </p>
+
+            <div class="novel-error-page__actions">
+                <a href="<?php echo esc_url(home_url('/')); ?>" class="novel-btn novel-btn--primary novel-btn--lg">
+                    🏠 صفحه اصلی
+                </a>
+                <a href="<?php echo esc_url(home_url('/search/')); ?>" class="novel-btn novel-btn--outline novel-btn--lg">
+                    🔍 جستجو
+                </a>
+                <a href="<?php echo esc_url(home_url('/novels/')); ?>" class="novel-btn novel-btn--outline novel-btn--lg">
+                    📚 رمان‌ها
+                </a>
+            </div>
+
+            <?php if (!empty($popular_novels)): ?>
+                <div class="novel-error-page__suggestions">
+                    <h3>📚 شاید اینا بهت بخوره:</h3>
+                    <div class="novel-error-page__novels-grid">
+                        <?php foreach ($popular_novels as $novel): ?>
+                            <a href="<?php echo get_permalink($novel->ID); ?>" class="novel-error-novel-card">
+                                <?php if (has_post_thumbnail($novel->ID)): ?>
+                                    <?php echo get_the_post_thumbnail($novel->ID, 'thumbnail', ['class' => 'novel-error-novel-card__img']); ?>
+                                <?php endif; ?>
+                                <span class="novel-error-novel-card__title"><?php echo esc_html($novel->post_title); ?></span>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+
         </div>
     </div>
-</div>
+</main>
 
 <?php get_footer(); ?>

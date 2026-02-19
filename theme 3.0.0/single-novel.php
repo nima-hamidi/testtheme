@@ -411,7 +411,20 @@ while (have_posts()) :
             </div>
         </section>
         <?php endif; ?>
-        
+        <?php
+            /*فاز 15*/
+            /**
+             * نمونه کد اضافه شونده به single-novel.php
+             * برای نمایش بنر catch-up
+             */
+
+            // === قبل از لیست قسمت‌ها اضافه شود ===
+
+            // بنر Catch-up (اگر کاربر مدتی نخوانده)
+            if (class_exists('Novel_Smart_Features') && is_user_logged_in()) {
+                Novel_Smart_Features::get_instance()->render_catchup_banner(get_the_ID());
+            }
+        ?>
         <!-- ═══ بخش ۴: لیست قسمت‌ها ═══ -->
         <section class="novel-chapters" id="chapters">
             <div class="chapters-header">

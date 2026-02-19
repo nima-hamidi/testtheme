@@ -112,6 +112,24 @@ class Novel_Core {
         if (class_exists('Novel_Polls')) {
             Novel_Polls::create_tables();
         }
+        /* فاز 14*/
+        // Achievements tables
+        if (class_exists('Novel_Achievements')) {
+        Novel_Achievements::create_tables();
+        }
+        
+        if (class_exists('Novel_Challenges')) {
+            Novel_Challenges::create_tables();
+        }
+        
+        if (class_exists('Novel_Quiz')) {
+            Novel_Quiz::create_tables();
+        }
+
+        if (class_exists('Novel_Author_Banners'))  {
+            Novel_Author_Banners::create_tables();
+        }
+
         
         // ۲. ساخت صفحات پیش‌فرض
         $this->create_default_pages();
