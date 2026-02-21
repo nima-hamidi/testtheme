@@ -356,6 +356,18 @@ function novel_enqueue_assets() {
     if (is_singular('novel') || is_singular('chapter')) {
         wp_enqueue_script('novel-comments', NOVEL_ASSETS . 'js/comments.js', ['novel-main'], NOVEL_VERSION, true);
     }
+
+    /*صفحه فرانت جا مانده قبل از فاز 15*/
+
+        // ═══ Front Page ═══
+    if ( is_front_page() ) {
+        wp_enqueue_style( 'novel-front-page', NOVEL_ASSETS . 'css/front-page.css', ['novel-main'], NOVEL_VERSION );
+        wp_enqueue_script( 'novel-front-page', NOVEL_ASSETS . 'js/front-page.js', [], NOVEL_VERSION, true );
+        wp_localize_script( 'novel-front-page', 'novelFrontPage', [
+            'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+            'nonce'   => wp_create_nonce( 'novel_front_page_nonce' ),
+        ]);
+    }
 }
 
 
@@ -1778,3 +1790,49 @@ add_action('wp_enqueue_scripts', function() {
 
 
 
+
+
+
+/*صفحه فرانت پیج جا مانده قبل از فاز 15*/
+
+// ═══════════════════════════════════════
+// Helper: Chapter counts by type
+// ═══════════════════════════════════════
+if ( ! function_exists( 'novel_get_chapter_counts_by_type' ) ) {
+    function novel_get_chapter_counts_by_type( $novel_id ) {
+        global $wpdb;
+
+        $total = (int) $wpdb->get_var( $wpdb->prepare(
+            "SELECT COUNT(*) FROM {$wpdb->posts} p
+             INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
+             WHERE p.post_type = 'chapter' AND p.post_status = 'publish'
+             AND pm.meta_key = 'parent_novel' AND pm.meta_value = %s",
+            $novel_id
+        ) );
+
+        $vip = (int) $wpdb->get_var( $wpdb->prepare(
+            "SELECT COUNT(*) FROM {$wpdb->posts} p
+             INNER JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
+             INNER JOIN {$wpdb->postmeta} pm2 ON p.ID = pm2.post_id
+             WHERE p.post_type = 'chapter' AND p.post_status = 'publish'
+             AND pm.meta_key = 'parent_novel' AND pm.meta_value = %s
+             AND pm2.meta_key = 'chapter_is_vip' AND pm2.meta_value = '1'",
+            $novel_id
+        ) );
+
+        return [
+            'total' => $total,
+            'vip'   => $vip,
+            'free'  => $total - $vip,
+        ];
+    }
+}
+
+// ═══════════════════════════════════════
+// Helper: Chapter permalink
+// ═══════════════════════════════════════
+if ( ! function_exists( 'novel_get_chapter_permalink' ) ) {
+    function novel_get_chapter_permalink( $chapter_id ) {
+        return get_permalink( $chapter_id );
+    }
+}
